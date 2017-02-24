@@ -10,4 +10,6 @@ solution:
 solution:
    sudo npm install express --save
    
-(3):
+(3):SyntaxError: missing ) after argument list
+solution:
+    It happens when read json file, the cause is that key should not start with a number like 9256 or 9226. Make the key's first charactar to be alphabet like U9256 or U9226.problem solved!!
