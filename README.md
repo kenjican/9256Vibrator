@@ -5,5 +5,9 @@ problems entountered:
 (1):serialport install failed
 solution:
    sudo npm install -g serialport --unsafe-perm
+
+(2): require express module ,failed
+solution:
+   sudo npm install express --save
    
-   
+(3):
