@@ -18,3 +18,9 @@ solution:
 solution:
    open ~/.vimrc (if not exists , create one) ,and add  syntax on in the .vimrc file.
    
+(5):Unkonwn vibrator status,if it is vibrating at which frewuency?
+solution:
+   None. Ask vendor of vibrator.
+ 
+ 
+
