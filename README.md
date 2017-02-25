@@ -22,5 +22,6 @@ solution:
 solution:
    None. Ask vendor of vibrator.
  
- 
+(6):Error: Cannot find module 'mongoose' and Error: Cannot find module 'bluebird'
+solution: Due to install global, module 'mongoose', 'bluebird' can not be found. Do this: sudo npm link mongoose  , and sudo npm link bluebird
 
