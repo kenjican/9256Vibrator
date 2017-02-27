@@ -4,8 +4,8 @@ problems entountered:
 
 (1):serialport install failed
 solution:
-   sudo npm install -g serialport --unsafe-perm
-
+   sudo npm install serialport --unsafe-perm . Have to install in the projecr folder ,to intstalling global would produce require error.
+   
 (2): require express module ,failed
 solution:
    sudo npm install express --save
