@@ -1,5 +1,6 @@
 var xmlhttp;
 xmlhttp = new XMLHttpRequest();
+xmlhttpC = new XMLHttpRequest();
 
 function calvalue(va){
    if(va < 32767) {
@@ -42,5 +43,31 @@ xmlhttp.onreadystatechange = function(){
 
  }
 }
+
+function run(){
+  xmlhttpC.open("GET",'/run',true);
+  xmlhttpC.responseType = 'text';
+  xmlhttpC.send();
+}
+
+function stop(){
+  xmlhttpC.open("GET",'/stop',true);
+  xmlhttpC.responseType = 'text';
+  xmlhttpC.send();
+}
+
+function steps(){
+  xmlhttpC.open("GET",'/steps',true);
+  xmlhttpC.responseType = 'text';
+  xmlhttpC.send();
+}
+
+function holds(){
+  xmlhttpC.open("GET",'/holds',true);
+  xmlhttpC.responseType = 'text';
+  xmlhttpC.send();
+}
+
+
 
 var t2 = setInterval(getvalue,1000);

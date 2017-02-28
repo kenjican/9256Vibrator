@@ -136,6 +136,22 @@ app.get('/getvalue',function(req,res){
   res.end;
 });
 
+app.get('/run',function(req,res){
+  U8256.write(setupjson.U8256.run);
+});
+
+app.get('/stop',function(req,res){
+  U8256.write(setupjson.U8256.stop);
+});
+
+app.get('/steps',function(req,res){
+  U8256.write(setupjson.U8256.steps);
+});
+
+app.get('/holds',function(req,res){
+  U8256.write(setupjson.U8256.holds);
+});
+
 
 app.listen(8888);
 
