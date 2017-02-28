@@ -2,14 +2,18 @@
 <html>
 <head>
 <meta charset='utf-8'/>
-
+<link rel="stylesheet" type="text/css" href="main.css">
+<script src = "U8256.js"></script>
 </head>
 <body>
 <table>
 <tr><td></td><td>温度</td><td>湿度</td><td>震动频率</td></tr>
-<tr><td></td><td id='TPV'></td><td id='HPV'></td><td id='Hz'></td></tr>
-<tr><td></td><td id='TSV'></td><td id ='HSV'></td><td id='clcyes'></td></tr>
-<tr><td></td><td id='TMV'></td><td id ='HMV'></td><td id='steps'></td></tr>
+<tr><td>测定值 PV</td><td id='TPV'></td><td id='HPV'></td><td id='Hz'></td></tr>
+<tr><td>目标值 SV</td><td id='TSV'></td><td id ='HSV'></td><td></td></tr>
+<tr><td>输出值 MV</td><td id='TMV'></td><td id ='HMV'></td><td></td></tr>
+<tr><td>目前执行</td><td id='patterns'></td><td id='steps'></td><td id='cycles'></td></tr>
+<tr><td>剩余时间</td><td id='Timeleft'></td><td id='TCR'></td><td id='HCR'></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
 </table>
 
 </body>

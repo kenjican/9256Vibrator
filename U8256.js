@@ -1,0 +1,46 @@
+var xmlhttp;
+xmlhttp = new XMLHttpRequest();
+
+function calvalue(va){
+   if(va < 32767) {
+     return va;
+  }else{
+    va = va - 65536;
+    if(va > -20000){
+      return va;
+   }else{
+      return "断线"
+  }
+}
+}
+
+
+function getvalue(){
+  xmlhttp.open("GET","/getvalue",true);
+  xmlhttp.responseType = "text";
+  xmlhttp.send();
+}
+
+xmlhttp.onreadystatechange = function(){
+  if(xmlhttp.readyState ===4 && xmlhttp.status ===200){
+    var v = xmlhttp.response;
+    if(parseInt(v.slice(5,9),16) < 32767){
+    document.getElementById('TPV').innerHTML = parseInt(v.slice(5,9),16)/100;
+    }else{
+    document.getElementById('TPV').innerHTML = calvalue(parseInt(v.slice(5,9),16));
+    }
+    document.getElementById('TMV').innerHTML = parseInt(v.slice(66,68),16) + " %";
+    document.getElementById('HMV').innerHTML = parseInt(v.slice(70,72),16) + " %";
+    document.getElementById('HPV').innerHTML = parseInt(v.slice(9,13),16)/10;
+    document.getElementById('TSV').innerHTML = parseInt(v.slice(13,17),16)/100;
+    document.getElementById('cycles').innerHTML = "第" +( parseInt(v.slice(36,40),16) - parseInt(v.slice(40,44),16)) + "循环";
+    document.getElementById('steps').innerHTML = "第" + parseInt(v.slice(29,33),16) + " 段";
+    document.getElementById('patterns').innerHTML = "第" + parseInt(v.slice(33,35),16) + "组";
+    document.getElementById('Timeleft').innerHTML = parseInt(v.slice(60,64),16) + " 时 " + parseInt(v.slice(64,66),16) + " 分 ";
+    document.getElementById('TCR').innerHTML = parseInt(v.slice(68,70),16) + ' %';
+    document.getElementById('HCR').innerHTML = parseInt(v.slice(72,74),16) + ' %';
+
+ }
+}
+
+var t2 = setInterval(getvalue,1000);

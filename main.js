@@ -6,6 +6,8 @@ var net = require('net');
 var value;
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
+var serialP = require('serialport');
+
 
 /*
 Mongodb
@@ -20,7 +22,7 @@ var USchema = new mongoose.Schema({
 var UVC = db.model('UVC',USchema);
 
 /*
-modbus TCP connection and communication
+9256 modbus TCP connection and communication
 */
 
 var mbs = new Buffer(setupjson.U9256.GetValue,'hex');
@@ -78,11 +80,34 @@ client.on('data',function(data){
  values.push(data.readUInt16BE(40));
  values.push(data.readUInt16BE(42));
  values.push(data.readUInt16BE(46));
- values.push(data.readUInt16BE(50));
+ gvalues.push(data.readUInt16BE(50));
 
 
 
 });
+
+/*
+8256 serial port communication
+*/
+
+var U8256 = new serialP('/dev/ttyUSB0',{
+  baudRate:setupjson.U8256.baudRate,
+  dataBits:setupjson.U8256.dataBits,
+  stopBits:setupjson.U8256.stopBits,
+  parity:setupjson.U8256.parity,
+  parser:serialP.parsers.readline('\r\n')
+});
+
+function U8256gv(){
+  U8256.write(setupjson.U8256.GetValue);
+}  
+
+U8256.on('data',function(data){
+  value = data;  
+});
+
+
+
 
 /*
 vibrator
@@ -99,9 +124,18 @@ function VRun(hz){
 Web server
 */
 
+app.use(express.static(__dirname));
+
+
 app.get('/',function(req,res){
   res.sendFile('/home/pi/9256Vibrator/index.htm');
 });
+
+app.get('/getvalue',function(req,res){
+  res.send(value);
+  res.end;
+});
+
 
 app.listen(8888);
 
@@ -111,11 +145,10 @@ app.listen(8888);
 Scheduler, 1Hz
 */
 function schd(){
-   client.write(mbs);
-
+   //client.write(mbs);
+   U8256gv();
 }
 
 var t1 = setInterval(schd,setupjson.scheduler);
 
 
-console.log(setupjson.scheduler);

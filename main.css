@@ -1,0 +1,5 @@
+table, th, td{
+  border-bottom: 1px solid black;
+}
+
+tr:nth-child(odd){background-color:#b3f2b3} 
