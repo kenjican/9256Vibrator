@@ -40,7 +40,7 @@ xmlhttp.onreadystatechange = function(){
     document.getElementById('Timeleft').innerHTML = parseInt(v.slice(60,64),16) + " 时 " + parseInt(v.slice(64,66),16) + " 分 ";
     document.getElementById('TCR').innerHTML = parseInt(v.slice(68,70),16) + ' %';
     document.getElementById('HCR').innerHTML = parseInt(v.slice(72,74),16) + ' %';
-
+    document.getElementById('Hz').innerHTML = parseInt(v.slice(89,92),10);
  }
 }
 
@@ -67,7 +67,6 @@ function holds(){
   xmlhttpC.responseType = 'text';
   xmlhttpC.send();
 }
-
 
 
 var t2 = setInterval(getvalue,1000);

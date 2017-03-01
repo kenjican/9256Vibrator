@@ -2,4 +2,11 @@ table, th, td{
   border-bottom: 1px solid black;
 }
 
-tr:nth-child(odd){background-color:#b3f2b3} 
+tr:nth-child(odd){background-color:#ffaaaa} 
+
+.button1 {
+  background-color:#d4ee9f;
+  text-align:center;
+  font-size:26px;
+  border-radius:50%;
+}

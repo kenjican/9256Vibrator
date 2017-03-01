@@ -103,7 +103,13 @@ function U8256gv(){
 }  
 
 U8256.on('data',function(data){
-  value = data;  
+  var cyc;
+  var ste;
+  cyc = parseInt(data.slice(36,40),16) - parseInt(data.slice(40,44),16);
+  ste = parseInt(data.slice(29,33),16);
+// console.log(cyc + ',' + ste);
+//  value = data;
+  value = data + CheckCS(cyc,ste);  
 });
 
 
@@ -117,7 +123,14 @@ function VRun(hz){
   console.log(hz.toString(10).length);
 }
 
-
+function CheckCS(cyc,ste){
+  for(var i=0;i<setupjson.vibrator.Hz.length;i++){
+   if(setupjson.vibrator.Hz[i][0]==cyc && setupjson.vibrator.Hz[i][1]==ste){
+     return setupjson.vibrator.Hz[i][2];
+    }
+  }
+  return '000';
+}
 
 
 /*
@@ -150,6 +163,11 @@ app.get('/steps',function(req,res){
 
 app.get('/holds',function(req,res){
   U8256.write(setupjson.U8256.holds);
+});
+
+app.get('/tests',function(req,res){
+  res.send(setupjson.vibrator.Hz.length.toString(10));
+  res.end;
 });
 
 
