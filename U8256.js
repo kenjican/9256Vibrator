@@ -10,7 +10,7 @@ function calvalue(va){
     if(va > -20000){
       return va;
    }else{
-      return "断线"
+      return "---"
   }
 }
 }
@@ -25,15 +25,11 @@ function getvalue(){
 xmlhttp.onreadystatechange = function(){
   if(xmlhttp.readyState ===4 && xmlhttp.status ===200){
     var v = xmlhttp.response;
-    if(parseInt(v.slice(5,9),16) < 32767){
-    document.getElementById('TPV').innerHTML = parseInt(v.slice(5,9),16)/100;
-    }else{
-    document.getElementById('TPV').innerHTML = calvalue(parseInt(v.slice(5,9),16));
-    }
+    document.getElementById('TPV').innerHTML = calvalue(parseInt(v.slice(5,9),16))/100;
     document.getElementById('TMV').innerHTML = parseInt(v.slice(66,68),16) + " %";
     document.getElementById('HMV').innerHTML = parseInt(v.slice(70,72),16) + " %";
-    document.getElementById('HPV').innerHTML = parseInt(v.slice(9,13),16)/10;
-    document.getElementById('TSV').innerHTML = parseInt(v.slice(13,17),16)/100;
+    document.getElementById('HPV').innerHTML = calvalue(parseInt(v.slice(9,13),16))/100;
+    document.getElementById('TSV').innerHTML = calvalue(parseInt(v.slice(13,17),16))/100;
     document.getElementById('cycles').innerHTML = "第" +( parseInt(v.slice(36,40),16) - parseInt(v.slice(40,44),16)) + "循环";
     document.getElementById('steps').innerHTML = "第" + parseInt(v.slice(29,33),16) + " 段";
     document.getElementById('patterns').innerHTML = "第" + parseInt(v.slice(33,35),16) + "组";

@@ -107,9 +107,9 @@ U8256.on('data',function(data){
   var ste;
   cyc = parseInt(data.slice(36,40),16) - parseInt(data.slice(40,44),16);
   ste = parseInt(data.slice(29,33),16);
-// console.log(cyc + ',' + ste);
-//  value = data;
+  if(data.length > 15){
   value = data + CheckCS(cyc,ste);  
+  }
 });
 
 
@@ -125,7 +125,7 @@ function VRun(hz){
 
 function CheckCS(cyc,ste){
   for(var i=0;i<setupjson.vibrator.Hz.length;i++){
-   if(setupjson.vibrator.Hz[i][0]==cyc && setupjson.vibrator.Hz[i][1]==ste){
+   if((setupjson.vibrator.Hz[i][0]==cyc) && (setupjson.vibrator.Hz[i][1]==ste)){
      return setupjson.vibrator.Hz[i][2];
     }
   }
@@ -141,7 +141,7 @@ app.use(express.static(__dirname));
 
 
 app.get('/',function(req,res){
-  res.sendFile('/home/pi/9256Vibrator/index.htm');
+  res.sendFile('/home/ubuntu/9256Vibrator/index.htm');
 });
 
 app.get('/getvalue',function(req,res){
