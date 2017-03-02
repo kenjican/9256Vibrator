@@ -25,3 +25,7 @@ solution:
 (6):Error: Cannot find module 'mongoose' and Error: Cannot find module 'bluebird'
 solution: Due to install global, module 'mongoose', 'bluebird' can not be found. Do this: sudo npm link mongoose  , and sudo npm link bluebird
 
+
+
+Idea:
+(1)Seperate all the controller ,vibrator into single file. Setup.json is a configuration file for integrating all the parts.
