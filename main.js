@@ -183,6 +183,17 @@ function schd(){
    U8256gv();
 }
 
+/*
+Config system parameters
+*/
+
+app.get('/GetVibrator',function(req,res){
+   var getv = JSON.parse(fs.readFileSync('./config/vibrator.json','utf8'));
+   res.send(getv.vibrator.Hz);
+   res.end;  
+}
+);
+
 var t1 = setInterval(schd,setupjson.scheduler);
 
 

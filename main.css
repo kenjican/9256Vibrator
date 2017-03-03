@@ -10,3 +10,25 @@ tr:nth-child(odd){background-color:#ffaaaa}
   font-size:26px;
   border-radius:50%;
 }
+
+.modal {
+  display:none;
+  position:fixed;
+  z-index:1;
+  left:50%;
+  top:10%;
+  width:50%;
+  max-height:100%;
+  overflow:auto;
+}
+
+.modal-content{
+  margin:15% auto;
+  background-color:#fefefe;
+  width:80%;
+}
+
+textarea {
+  font-family:"Times New Roman";
+  font-size:28px;
+}

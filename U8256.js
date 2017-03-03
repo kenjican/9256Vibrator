@@ -10,7 +10,7 @@ function calvalue(va){
     if(va > -20000){
       return va;
    }else{
-      return "---"
+      return "---";
   }
 }
 }
@@ -40,6 +40,14 @@ xmlhttp.onreadystatechange = function(){
  }
 }
 
+
+xmlhttpC.onreadystatechange = function(){
+  if(xmlhttpC.readyState === 4 && xmlhttpC.status ===200){
+     var v = xmlhttpC.response;
+     document.getElementById('vhz').innerHTML = v;
+    } 
+}
+
 function run(){
   xmlhttpC.open("GET",'/run',true);
   xmlhttpC.responseType = 'text';
@@ -64,5 +72,19 @@ function holds(){
   xmlhttpC.send();
 }
 
+//var modal = document.getElementById('vbModal');
+
+function hzsetup(){
+  document.getElementById('vbModal').style.display = "block";
+  xmlhttpC.open('GET','/GetVibrator',true);
+  xmlhttpC.responseType = 'text';
+  xmlhttpC.send();
+}
+
+window.onclick = function(event){
+  if(event.target == document.getElementById('vbModal')){
+     document.getElementById('vbModal').style.display = 'none';
+}
+}
 
 var t2 = setInterval(getvalue,1000);

@@ -7,7 +7,7 @@
 </head>
 <body>
 <table>
-<tr><td></td><td>温度</td><td>湿度</td><td>震动频率</td></tr>
+<tr><td></td><td>温度</td><td>湿度</td><td id='vtext' onclick='hzsetup();'>震动频率</td></tr>
 <tr><td>测定值 PV</td><td id='TPV'></td><td id='HPV'></td><td id='Hz'></td></tr>
 <tr><td>目标值 SV</td><td id='TSV'></td><td id ='HSV'></td><td></td></tr>
 <tr><td>输出值 MV</td><td id='TMV'></td><td id ='HMV'></td><td></td></tr>
@@ -15,6 +15,19 @@
 <tr><td>剩余时间</td><td id='Timeleft'></td><td id='TCR'></td><td id='HCR'></td></tr>
 <tr><td><input type='button' value='保持' class='button1' onclick='holds();'/></td><td><input type='button' value='跳段' class='button1' onclick='steps();'/></td><td><input type='button' value='停止' class='button1' onclick='stop();'/></td><td><input type='button' value='运转' class='button1' onclick='run();'/></td></tr>
 </table>
+
+<div id='vbModal' class='modal'>
+  <p>test the modal</p>
+ <textarea rows='4' cols='50' id='vhz'>test
+</textarea>
+<!--
+  <div class='modal-content'>
+    <span class='close'>&times;</span>
+    <p>Modal Box for Vibrator</p>
+  </div>
+-->
+</div>
+
 
 </body>
 </html>
