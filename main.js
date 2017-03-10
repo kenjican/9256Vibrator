@@ -23,7 +23,7 @@ var UVC = db.model('UVC',USchema);
 
 /*
 9256 modbus TCP connection and communication
-*/
+
 
 var mbs = new Buffer(setupjson.U9256.GetValue,'hex');
 var client = new net.Socket();
@@ -80,16 +80,17 @@ client.on('data',function(data){
  values.push(data.readUInt16BE(40));
  values.push(data.readUInt16BE(42));
  values.push(data.readUInt16BE(46));
- gvalues.push(data.readUInt16BE(50));
+ values.push(data.readUInt16BE(50));
 
 
 
 });
 
+*/
+
 /*
 8256 serial port communication
 */
-
 var U8256 = new serialP('/dev/ttyUSB0',{
   baudRate:setupjson.U8256.baudRate,
   dataBits:setupjson.U8256.dataBits,
@@ -97,6 +98,7 @@ var U8256 = new serialP('/dev/ttyUSB0',{
   parity:setupjson.U8256.parity,
   parser:serialP.parsers.readline('\r\n')
 });
+
 
 function U8256gv(){
   U8256.write(setupjson.U8256.GetValue);
@@ -112,7 +114,9 @@ U8256.on('data',function(data){
   }
 });
 
-
+U8256.on('error',function(err){
+  console.log(err);
+});
 
 
 /*

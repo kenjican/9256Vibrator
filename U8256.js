@@ -1,6 +1,6 @@
-var xmlhttp;
-xmlhttp = new XMLHttpRequest();
-xmlhttpC = new XMLHttpRequest();
+//var xmlhttp;
+var xmlhttp = new XMLHttpRequest();
+var xmlhttpC = new XMLHttpRequest();
 
 function calvalue(va){
    if(va < 32767) {
@@ -44,9 +44,20 @@ xmlhttp.onreadystatechange = function(){
 xmlhttpC.onreadystatechange = function(){
   if(xmlhttpC.readyState === 4 && xmlhttpC.status ===200){
      var v = xmlhttpC.response;
-     document.getElementById('vhz').innerHTML = v;
+    document.getElementById('vhz').innerHTML = v;
     } 
 }
+
+
+function ajaxtest(url,datatype){
+  var a = new XMLHttpRequest();
+  a.open("GET",url,true);
+  a.responseType = datatype;
+  a.send();
+  console.log('ajaxtext get called');
+  return a;
+}
+
 
 function run(){
   xmlhttpC.open("GET",'/run',true);
@@ -76,9 +87,47 @@ function holds(){
 
 function hzsetup(){
   document.getElementById('vbModal').style.display = "block";
+/*
   xmlhttpC.open('GET','/GetVibrator',true);
   xmlhttpC.responseType = 'text';
   xmlhttpC.send();
+*/
+  var hztbl = document.getElementById('hztbl').children[1];
+  while(hztbl.firstChild){
+     hztbl.removeChild(hztbl.firstChild);
+   }
+  var a = ajaxtest('/GetVibrator','json');
+  a.onreadystatechange = function(){
+  if(a.readyState === 4 && a.status ===200){
+    var c = a.response;
+    var b = a.response.length;
+    for(var i = 0; i < b; i++){
+      hztbl.insertRow();
+      hztbl.children[i].setAttribute('contenteditable',true);
+      hztbl.children[i].setAttribute('type','number');
+      
+      hztbl.children[i].insertCell();
+      hztbl.children[i].insertCell();
+      hztbl.children[i].insertCell();
+
+      hztbl.children[i].children[0].innerHTML = c[i][0];
+      hztbl.children[i].children[1].innerHTML = c[i][1];
+      hztbl.children[i].children[2].innerHTML = parseInt(c[i][2]);
+
+   }
+ }
+}
+}
+function insertrow(){
+  var ir = document.getElementById('hztbl').insertRow(-1);
+  ir.setAttribute('contenteditable','true');
+  for(var i = 0;i<3;i++){
+    ir.insertCell(i);
+}
+}
+
+function delrow(){
+  document.getElementById('hztbl').deleteRow(-1);
 }
 
 window.onclick = function(event){
