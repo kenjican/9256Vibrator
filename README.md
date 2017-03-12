@@ -25,6 +25,13 @@ solution:
 (6):Error: Cannot find module 'mongoose' and Error: Cannot find module 'bluebird'
 solution: Due to install global, module 'mongoose', 'bluebird' can not be found. Do this: sudo npm link mongoose  , and sudo npm link bluebird
 
+(7): body-parser is needed for parse post json date. Have to install in local folder. sudo npm install --save body-praser
+(a)browser uses JSON.stringify fucntion to conver array to json form
+(b)server side, express's app config like this:
+       app.use(bodyParser.json());
+       app.use(bodyParser.urlencoded({extended:true}));
+       
+(8):
 
 
 Idea:
