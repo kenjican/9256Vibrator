@@ -1,3 +1,4 @@
+var bodyParser = require('body-parser');
 var fs = require('fs');
 var setupjson = JSON.parse(fs.readFileSync('setup.json','utf8'));
 var express = require('express');
@@ -142,7 +143,8 @@ Web server
 */
 
 app.use(express.static(__dirname));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 app.get('/',function(req,res){
   res.sendFile('/home/ubuntu/9256Vibrator/index.htm');
@@ -167,6 +169,16 @@ app.get('/steps',function(req,res){
 
 app.get('/holds',function(req,res){
   U8256.write(setupjson.U8256.holds);
+});
+
+app.post('/hzsave', function(req,res){
+  var vfile = JSON.parse(fs.readFileSync('./config/vibrator.json','utf8'));
+  vfile.vibrator.Hz = req.body;
+  fs.writeFile('./config/vibrator.json',JSON.stringify(vfile),function(err){
+     if(err) console.log(err);
+    }
+);
+ // console.log(req.body);
 });
 
 app.get('/tests',function(req,res){

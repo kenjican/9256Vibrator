@@ -54,9 +54,16 @@ function ajaxtest(url,datatype){
   a.open("GET",url,true);
   a.responseType = datatype;
   a.send();
-  console.log('ajaxtext get called');
   return a;
 }
+
+function ajaxtest1(url,data){
+  var a = new XMLHttpRequest();
+  a.open("POST",url);
+  a.setRequestHeader("content-Type","application/json");
+  a.send(data);
+}
+
 
 
 function run(){
@@ -118,6 +125,7 @@ function hzsetup(){
  }
 }
 }
+
 function insertrow(){
   var ir = document.getElementById('hztbl').insertRow(-1);
   ir.setAttribute('contenteditable','true');
@@ -134,6 +142,26 @@ window.onclick = function(event){
   if(event.target == document.getElementById('vbModal')){
      document.getElementById('vbModal').style.display = 'none';
 }
+}
+
+function hzsave(){
+  if(confirm("确认保存目前设定?")){
+    var x = document.getElementById('hztbl').children[1]; 
+    var y = x.childElementCount;
+    var hzarray = []; 
+    for(var i = 0; i < y; i++){
+      var cellarray = [];
+      cellarray.push(parseInt(x.children[i].children[0].innerHTML));
+      cellarray.push(parseInt(x.children[i].children[1].innerHTML));
+      cellarray.push(x.children[i].children[2].innerHTML);
+      hzarray.push(cellarray);
+    } 
+  } else {
+    alert("放弃");
+  }
+
+    console.log(hzarray);
+    ajaxtest1('/hzsave',JSON.stringify(hzarray));
 }
 
 var t2 = setInterval(getvalue,1000);
