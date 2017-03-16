@@ -31,7 +31,9 @@ solution: Due to install global, module 'mongoose', 'bluebird' can not be found.
        app.use(bodyParser.json());
        app.use(bodyParser.urlencoded({extended:true}));
        
-(8):
+(8):echarts error message: invalid dom , due to initiallize echart before doucmnet loaded.
+solution:
+   Initialize echarts since document had beed loaded,,error message disappered.
 
 
 Idea:
