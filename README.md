@@ -1,4 +1,4 @@
-# 9256Vibrator ， get the running cycles ,step status and make the vibtator run at specific Hz. Raspberry pi as the controller,connectiing to both 9256 and vibrator
+# 9256Vibrator , get the running cycles ,step status and make the vibtator run at specific Hz. Raspberry pi as the controller,connectiing to both 9256 and vibrator
 
 problems entountered:
 
@@ -31,8 +31,12 @@ solution: Due to install global, module 'mongoose', 'bluebird' can not be found.
        app.use(bodyParser.json());
        app.use(bodyParser.urlencoded({extended:true}));
        
-(8):
+(8):echarts error message: invalid dom , due to initiallize echart before doucmnet loaded.
+solution:
+   Initialize echarts since document had beed loaded,,error message disappered.
 
 
 Idea:
 (1)Seperate all the controller ,vibrator into single file. Setup.json is a configuration file for integrating all the parts.
+
+(2) Make the best of human sensor,such as 眼耳鼻舌身意. Flash light or alarm color to attract attention. TTS voice to alert the present status or alert.mobile phone vibration to notice status.
