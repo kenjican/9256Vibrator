@@ -30,6 +30,7 @@ xmlhttp.onreadystatechange = function(){
     document.getElementById('HMV').innerHTML = parseInt(v.slice(70,72),16) + " %";
     document.getElementById('HPV').innerHTML = calvalue(parseInt(v.slice(9,13),16))/100;
     document.getElementById('TSV').innerHTML = calvalue(parseInt(v.slice(13,17),16))/100;
+    document.getElementById('HSV').innerHTML = calvalue(parseInt(v.slice(17,21),16))/100;
     document.getElementById('cycles').innerHTML = "第" +( parseInt(v.slice(36,40),16) - parseInt(v.slice(40,44),16)) + "循环";
     document.getElementById('steps').innerHTML = "第" + parseInt(v.slice(29,33),16) + " 段";
     document.getElementById('patterns').innerHTML = "第" + parseInt(v.slice(33,35),16) + "组";
@@ -164,4 +165,29 @@ function hzsave(){
     ajaxtest1('/hzsave',JSON.stringify(hzarray));
 }
 
-var t2 = setInterval(getvalue,1000);
+function otchart(){
+   var dt = new Date(0);
+   var va = [];
+   va[0] = (document.getElementById('TPV').innerHTML).toString();
+   va[1] = document.getElementById('HPV').innerHTML;
+   va[2] = document.getElementById('TSV').innerHTML;
+   //va.push(document.getElementById('HPV').innerHTML);
+   charData.setOption({
+     xAxis:{data:dt},
+     series:[
+     {data:va[0]},
+     {data:va[1]},
+     {data:va[2]}
+     ]
+  });
+}
+
+
+
+
+function sched(){
+  getvalue();
+  //otchart();
+}
+
+var t2 = setInterval(sched,1000);

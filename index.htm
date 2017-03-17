@@ -4,9 +4,17 @@
 <meta charset='utf-8'/>
 <link rel="stylesheet" type="text/css" href="main.css">
 <script src = "U8256.js"></script>
+<script src = "jquery-3.1.1.min.js"></script>
+<script src = "echarts.js"></script>
+<script src = "./jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script src = "jquery-ui-timepicker-addon.js"></script>
+<script src = "thvcharts.js"></script>
+<link rel="stylesheet" media="all" type="text/css" href="jquery-ui-timepicker-addon.css"/>
+<link rel="stylesheet" media="all" type="text/css" href="./jquery-ui-1.12.1/jquery-ui.css"/>
+
 </head>
 <body>
-<table>
+<table id='THVtable'>
 <tr><td></td><td>温度</td><td>湿度</td><td id='vtext' onclick='hzsetup();'>震动频率</td></tr>
 <tr><td>测定值 PV</td><td id='TPV'></td><td id='HPV'></td><td id='Hz'></td></tr>
 <tr><td>目标值 SV</td><td id='TSV'></td><td id ='HSV'></td><td></td></tr>
@@ -16,6 +24,10 @@
 <tr><td><input type='button' value='保持' class='button1' onclick='holds();'/></td><td><input type='button' value='跳段' class='button1' onclick='steps();'/></td><td><input type='button' value='停止' class='button1' onclick='stop();'/></td><td><input type='button' value='运转' class='button1' onclick='run();'/></td></tr>
 </table>
 
+<div id ="chart"></div>
+<font size='2'>从<input type='text' id='fDate' readonly/>到<input type='text' id='tDate' readonly/>
+<input type='button' value='历史曲线' class='button1' onclick='gethis();'/>
+</font>
 <div id='vbModal' class='modal'>
 <div class='modal-content'>
 <table id='hztbl'>
@@ -35,7 +47,6 @@
   </div>
 -->
 </div>
-
 
 </body>
 </html>

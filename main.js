@@ -14,13 +14,16 @@ var serialP = require('serialport');
 Mongodb
 */
 
-var db = mongoose.createConnection('localhost','U9256V');
+var db = mongoose.createConnection('localhost','U8256V');
 
-var USchema = new mongoose.Schema({
+var U8256Scm = new mongoose.Schema({
    data:[]
 }); 
 
-var UVC = db.model('UVC',USchema);
+var UVData = db.model('UVData',U8256Scm);
+
+
+
 
 /*
 9256 modbus TCP connection and communication
@@ -100,18 +103,40 @@ var U8256 = new serialP('/dev/ttyUSB0',{
   parser:serialP.parsers.readline('\r\n')
 });
 
+function calvalue(va){
+  if(va < 32767){
+    return va;
+  }else{
+    va = va -65536;
+    if (va > -20000){
+       return va;
+    }else{
+       return '---';
+    }
+  }
+}
+
 
 function U8256gv(){
   U8256.write(setupjson.U8256.GetValue);
 }  
 
 U8256.on('data',function(data){
+  if(data.length > 15){
   var cyc;
   var ste;
   cyc = parseInt(data.slice(36,40),16) - parseInt(data.slice(40,44),16);
   ste = parseInt(data.slice(29,33),16);
-  if(data.length > 15){
-  value = data + CheckCS(cyc,ste);  
+  var hz = CheckCS(cyc,ste);
+  value = data + hz;  
+  
+  var uv = new UVData({data:[]});
+  uv.data.push(calvalue(parseInt(data.slice(5,9),16))/100);
+  uv.data.push(calvalue(parseInt(data.slice(9,13),16))/100);
+  uv.data.push(calvalue(parseInt(data.slice(13,17),16))/100);
+  uv.data.push(calvalue(parseInt(data.slice(17,21),16))/100);
+  uv.data.push(hz);
+  uv.save();
   }
 });
 
@@ -180,6 +205,15 @@ app.post('/hzsave', function(req,res){
 );
  // console.log(req.body);
 });
+
+app.get('/gethis/:fDate/:tDate',function(req,res){
+  UVData.find({'_id':{$gt:(req.params.fDate + '0000000000000000'),$lt:(req.params.tDate +'0000000000000000')}}).exec(function(err,his){
+    if (err) throw err;
+    res.send(his);
+    res.end;
+   });
+ });
+
 
 app.get('/tests',function(req,res){
   res.send(setupjson.vibrator.Hz.length.toString(10));
