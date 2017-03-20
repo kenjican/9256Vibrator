@@ -2,16 +2,21 @@
 <html>
 <head>
 <meta charset='utf-8'/>
-<link rel="stylesheet" type="text/css" href="main.css">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <script src = "U8256.js"></script>
 <script src = "jquery-3.1.1.min.js"></script>
 <script src = "echarts.js"></script>
+<!--
 <script src = "./jquery-ui-1.12.1/jquery-ui.min.js"></script>
 <script src = "jquery-ui-timepicker-addon.js"></script>
-<script src = "thvcharts.js"></script>
 <link rel="stylesheet" media="all" type="text/css" href="jquery-ui-timepicker-addon.css"/>
 <link rel="stylesheet" media="all" type="text/css" href="./jquery-ui-1.12.1/jquery-ui.css"/>
+-->
+<link rel="stylesheet" type="text/css" href="mobiscroll.custom-2.6.2.min.css"/>
+<script src="mobiscroll.custom-2.6.2.min.js"></script>
 
+<script src = "thvcharts.js"></script>
+<link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
 <table id='THVtable'>
@@ -22,12 +27,11 @@
 <tr><td>目前执行</td><td id='patterns'></td><td id='steps'></td><td id='cycles'></td></tr>
 <tr><td>剩余时间</td><td id='Timeleft'></td><td id='TCR'></td><td id='HCR'></td></tr>
 <tr><td><input type='button' value='保持' class='button1' onclick='holds();'/></td><td><input type='button' value='跳段' class='button1' onclick='steps();'/></td><td><input type='button' value='停止' class='button1' onclick='stop();'/></td><td><input type='button' value='运转' class='button1' onclick='run();'/></td></tr>
+<tr><td>开始时间</td><td>结束时间</td><td></td></tr>
+<tr><td><input type='text' id='fDate' readonly/></td><td><input type='text' id='tDate' readonly/></td><td><input type='button' value='历史曲线' class='button1' onclick='gethis();'/></td></tr>
 </table>
 
 <div id ="chart"></div>
-<font size='2'>从<input type='text' id='fDate' readonly/>到<input type='text' id='tDate' readonly/>
-<input type='button' value='历史曲线' class='button1' onclick='gethis();'/>
-</font>
 <div id='vbModal' class='modal'>
 <div class='modal-content'>
 <table id='hztbl'>
@@ -40,13 +44,13 @@
 </tbody>
 </table>
 </div>
+</div>
 <!--
   <div class='modal-content'>
     <span class='close'>&times;</span>
     <p>Modal Box for Vibrator</p>
   </div>
 -->
-</div>
 
 </body>
 </html>

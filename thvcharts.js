@@ -2,18 +2,63 @@
 //var chart = document.getElementById('chart');
 var charData = {};//echarts.init(chart);
 $(document).ready(function(){
-  $('#fDate').datetimepicker({
-   timeFormat:'HH:mm:ss' 
-  });
-  $('#tDate').datetimepicker({
-   timeFormat:'HH:mm:ss',
-  });
+//  $('#fDate').datetimepicker({
+//  timeFormat:'HH:mm:ss' 
+//  });
+//  $('#tDate').datetimepicker({
+//   timeFormat:'HH:mm:ss',
+//  });
+
+$('#fDate').mobiscroll({
+   preset:'datetime',
+   theme:'defaule',
+   lang:'zh',
+   mode:'scroller',
+   display:'modal',
+   dateFormat:'yyyy-mm-dd',
+   setText:'确定',
+   cancelText:'取消',
+   dayText:'日',
+   monthText:'月',
+   yearText:'年',
+   startYear:'2017',
+   endYear:'2037',
+
+});
+$('#tDate').mobiscroll({
+   preset:'datetime',
+   //theme:'ios',
+   lang:'zh',
+   mode:'scroller',
+   display:'modal',
+   dateFormat:'yyyy-mm-dd',
+   setText:'确定',
+   cancelText:'取消',
+   dayText:'日',
+   monthText:'月',
+   yearText:'年',
+   startYear:'2017',
+   endYear:'2037'
+});
+
 var chart = document.getElementById('chart');
 charData = echarts.init(chart);
 charData.setOption({
 //title:{
 //  text:'温湿振动'
 //	},
+
+toolbox:{
+  feature:{
+    dataZoom:{
+      yAxisIndex:'none'
+    },
+    restore:{},
+    saveAsImage:{},
+    dataView:{}
+  }
+},
+
 tooltip:{
   trigger:'axis'
 },
@@ -54,18 +99,48 @@ yAxis:{},
 series:[
 {name:'温度PV',
 type:'line',
+itemStyle:{
+  normal:{
+    lineStyle:{
+      color:'#ff0000'
+    }
+  }
+},
 data:[]
 },
 {name:'湿度PV',
  type:'line',
+ itemStyle:{
+  normal:{
+    lineStyle:{
+      color:'#000080'
+    }
+  }
+},
  data:[]
 },
 {name:'温度SV',
  type:'line',
+ itemStyle:{
+   normal:{
+     lineStyle:{
+        type:'dashed',
+        color:'#ff0000'
+      }
+   }
+ },
  data:[]
 },
 {name:'湿度SV',
  type:'line',
+ itemStyle:{
+   normal:{
+     lineStyle:{
+       type:'dashed',
+       color:'#000080'
+     }
+   }
+ },
  data:[]
 },
 {name:'震动Hz',

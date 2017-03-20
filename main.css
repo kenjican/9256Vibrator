@@ -1,7 +1,18 @@
-table, th, td, tr{
+@media only screen and (min-width:1000px){
+
+
+}
+
+
+table, th, td, tr,{
   border-bottom: 1px solid black;
+  /*height:16px;*/
+}
+
+input[type='text']{
   height:16px;
 }
+
 
 tr:nth-child(odd){background-color:#ffaaaa} 
 
@@ -34,19 +45,19 @@ tr:nth-child(odd){background-color:#ffaaaa}
 
 
 #THVtable{
+  width:40%;
+  height:50%;
   display:inline-block;
 }
 
 #chart{
-  width:750px;
-  height:360px;
-  float:right;
+  width:800px;
+  height:500px;
+
+  float:center;
   vertical-align:top;
+
   display:inline-block;
+
 }
 
-#chartdate{
-  float:right;
-  vertical-align:bottom;
-  display:inline-block;
-}
