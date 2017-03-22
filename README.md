@@ -34,9 +34,14 @@ solution: Due to install global, module 'mongoose', 'bluebird' can not be found.
 (8):echarts error message: invalid dom , due to initiallize echart before doucmnet loaded.
 solution:
    Initialize echarts since document had beed loaded,,error message disappered.
+(9):jQuery datetime picker layout is not adequate, replace with mobiscroll 2.6.1. Mobiscroller is more user friendely for mobile and tablet.
 
+(10):ttyUSB is not always the same after rebooted.
+solution:https://hallard.me/fixed-usb-dev-uteleinfo/ , but if customer replace with other USB-serial adapter,,,how to make the port number consistent?
 
 Idea:
 (1)Seperate all the controller ,vibrator into single file. Setup.json is a configuration file for integrating all the parts.
 
 (2) Make the best of human sensor,such as 眼耳鼻舌身意. Flash light or alarm color to attract attention. TTS voice to alert the present status or alert.mobile phone vibration to notice status.
+
+(3) How to protect the program? encrypt the SD card? or provide the usb-serial port and fix the serial number of USB serial chip?

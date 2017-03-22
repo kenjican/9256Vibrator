@@ -38,7 +38,8 @@ $('#tDate').mobiscroll({
    monthText:'月',
    yearText:'年',
    startYear:'2017',
-   endYear:'2037'
+   endYear:'2037',
+   showNow:true
 });
 
 var chart = document.getElementById('chart');
@@ -152,10 +153,15 @@ data:[]
 });
 
 function gethis(){
+  if($('fDate').val() != '' && $('#tDate').val() != ''){
   charData.showLoading();
   var a = new Date($('#fDate').val());
   var b = new Date($('#tDate').val());
   gethistory('gethis/' + (a.getTime()/1000).toString(16) + '/' + (b.getTime()/1000).toString(16));
+  }else{
+  alert("开始和结束时间不得为空白，请输入");
+  
+  }
 }
 
 function gethistory(ftdate){
@@ -167,7 +173,7 @@ function gethistory(ftdate){
      var dl = da.length;
      for (var i =0; i < dl;i++){
         dt.setTime(parseInt((da[i]._id).slice(0,8),16)*1000);
-        dat[i] = dt.toString();
+        dat[i] = dt.toLocaleString();
         tpv[i] = da[i].data[0];
         hpv[i] = da[i].data[1];
         tsv[i] = da[i].data[2];

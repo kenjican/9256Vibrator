@@ -24,84 +24,28 @@ var UVData = db.model('UVData',U8256Scm);
 
 
 
-
-/*
-9256 modbus TCP connection and communication
-
-
-var mbs = new Buffer(setupjson.U9256.GetValue,'hex');
-var client = new net.Socket();
-
-client.connect(setupjson.U9226.port,setupjson.U9226.ip,function(){
-
-});
-
-client.on('error',function(err){
-   console.error(err.code);
-});
-
-function calvalue(v){
-   return (v - 65536);
-}
-
-
-client.on('data',function(data){
- var values = [];
-
- if(data.readUInt16BE(10) < 32767){
-   values.push(data.readUInt16BE(10)/10);
- }
- else{
-   values.push(calvalue(data.readUInt16BE(10))/10);
- }
-
- values.push(data.readUInt16BE(14)/10);
- values.push(data.readUInt16BE(16)/10);
-
- if(data.readUInt16BE(18) < 32767){
-   values.push(data.readUInt16BE(18)/10);
- }
- else{
-   values.push(calvalue(data.readUInt16BE(18))/10);
- }
-
- values.push(data.readUInt16BE(22)/10);
- values.push(data.readUInt16BE(24)/10);
-
- if(data.readUInt16BE(26) < 32767){
-   values.push(data.readUInt16BE(26)/10);
- }
- else{
-   values.push(calvalue(data.readUInt16BE(26))/10);
- }
-
- values.push(data.readUInt16BE(30)/10);
- values.push(data.readUInt16BE(32)/10);
-
- values.push(data.readUInt16BE(34));
- values.push(data.readUInt16BE(36));
- values.push(data.readUInt16BE(38));
- values.push(data.readUInt16BE(40));
- values.push(data.readUInt16BE(42));
- values.push(data.readUInt16BE(46));
- values.push(data.readUInt16BE(50));
-
-
-
-});
-
-*/
-
 /*
 8256 serial port communication
 */
-var U8256 = new serialP('/dev/ttyUSB0',{
+var U8256 = new serialP('/dev/U8256',{
   baudRate:setupjson.U8256.baudRate,
   dataBits:setupjson.U8256.dataBits,
   stopBits:setupjson.U8256.stopBits,
   parity:setupjson.U8256.parity,
   parser:serialP.parsers.readline('\r\n')
 });
+
+var dzv = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
+
+var DZVibrator = new serialP('/dev/vibrator',{
+  baudRate:dzv.DZ.baudRate,
+  dataBits:dzv.DZ.dataBits,
+  stopBits:dzv.DZ.stopBits,
+  parity:dzv.DZ.parity,
+  parser:serialP.parsers.readline('\r\n')
+});
+
+
 
 function calvalue(va){
   if(va < 32767){
@@ -111,7 +55,7 @@ function calvalue(va){
     if (va > -20000){
        return va;
     }else{
-       return '---';
+       return '';
     }
   }
 }
@@ -197,9 +141,9 @@ app.get('/holds',function(req,res){
 });
 
 app.post('/hzsave', function(req,res){
-  var vfile = JSON.parse(fs.readFileSync('./config/vibrator.json','utf8'));
-  vfile.vibrator.Hz = req.body;
-  fs.writeFile('./config/vibrator.json',JSON.stringify(vfile),function(err){
+  var vfile = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
+  vfile.DZ.Hz = req.body;
+  fs.writeFile('config/vibrator.json',JSON.stringify(vfile),function(err){
      if(err) console.log(err);
     }
 );
@@ -238,8 +182,11 @@ Config system parameters
 */
 
 app.get('/GetVibrator',function(req,res){
-   var getv = JSON.parse(fs.readFileSync('./config/vibrator.json','utf8'));
-   res.send(getv.vibrator.Hz);
+   //var getv = JSON.parse(fs.readFile('vibrator.json','utf8'));
+   var getv = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
+   //console.log(getv.DZ.Hz);
+   res.header('Content-Type','application/json');
+   res.send(getv.DZ.Hz);
    res.end;  
 }
 );

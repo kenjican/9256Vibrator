@@ -10,7 +10,7 @@ function calvalue(va){
     if(va > -20000){
       return va;
    }else{
-      return "---";
+      return "-";
   }
 }
 }
@@ -108,6 +108,7 @@ function hzsetup(){
   a.onreadystatechange = function(){
   if(a.readyState === 4 && a.status ===200){
     var c = a.response;
+    console.log(c);
     var b = a.response.length;
     for(var i = 0; i < b; i++){
       hztbl.insertRow();
@@ -158,7 +159,7 @@ function hzsave(){
       hzarray.push(cellarray);
     } 
   } else {
-    alert("放弃");
+    //alert("放弃");
   }
 
     console.log(hzarray);
