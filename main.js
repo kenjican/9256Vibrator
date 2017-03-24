@@ -72,6 +72,7 @@ U8256.on('data',function(data){
   cyc = parseInt(data.slice(36,40),16) - parseInt(data.slice(40,44),16);
   ste = parseInt(data.slice(29,33),16);
   var hz = CheckCS(cyc,ste);
+  
   value = data + hz;  
   
   var uv = new UVData({data:[]});
@@ -87,6 +88,7 @@ U8256.on('data',function(data){
 U8256.on('error',function(err){
   console.log(err);
 });
+
 
 
 /*
@@ -105,6 +107,11 @@ function CheckCS(cyc,ste){
   }
   return '000';
 }
+
+DZVibrator.on('error',function(err){
+   console.log(err);
+}
+
 
 
 /*

@@ -108,7 +108,7 @@ function hzsetup(){
   a.onreadystatechange = function(){
   if(a.readyState === 4 && a.status ===200){
     var c = a.response;
-    console.log(c);
+    //console.log(c);
     var b = a.response.length;
     for(var i = 0; i < b; i++){
       hztbl.insertRow();
@@ -129,15 +129,17 @@ function hzsetup(){
 }
 
 function insertrow(){
-  var ir = document.getElementById('hztbl').insertRow(-1);
+  var ir = document.getElementById('hztbl').children[1];
+  ir.insertRow(-1);
   ir.setAttribute('contenteditable','true');
+  ir.lastChild.setAttribute("style","height:50px");
   for(var i = 0;i<3;i++){
-    ir.insertCell(i);
+    ir.lastChild.insertCell(i);
 }
 }
 
 function delrow(){
-  document.getElementById('hztbl').deleteRow(-1);
+  document.getElementById('hztbl').children[1].deleteRow(-1);
 }
 
 window.onclick = function(event){
@@ -153,9 +155,17 @@ function hzsave(){
     var hzarray = []; 
     for(var i = 0; i < y; i++){
       var cellarray = [];
+      var zerolead = '000';
       cellarray.push(parseInt(x.children[i].children[0].innerHTML));
       cellarray.push(parseInt(x.children[i].children[1].innerHTML));
-      cellarray.push(x.children[i].children[2].innerHTML);
+      //cellarray.push(x.children[i].children[2].innerHTML);
+      zerolead = zerolead + x.children[i].children[2].innerHTML;
+      if(parseInt(zerolead.substr(-3,3)) > 127) {
+         alert('频率不得大于127');
+         return;
+        }
+      cellarray.push(zerolead.substr(-3,3));
+      cellarray.push(getfs(zerolead.substr(-3,3)).toString());      
       hzarray.push(cellarray);
     } 
   } else {
@@ -165,6 +175,17 @@ function hzsave(){
     console.log(hzarray);
     ajaxtest1('/hzsave',JSON.stringify(hzarray));
 }
+
+function getfs(a){
+  var fs = '4';
+  for(var i = 0; i <3 ; i++){
+     fs = fs ^ a[i];
+   }
+  return fs;
+}
+
+
+
 
 function otchart(){
    var dt = new Date(0);

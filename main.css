@@ -2,22 +2,22 @@
 
 
 }
-
+body{
+  background-color:#cccccc;
+  font-size:22px;
+}
 
 table, th, td, tr,{
   border-bottom: 1px solid black;
-  height:16px;
-}
-
-input[type='text']{
-  height:16px;
+  width:50px;
+  
 }
 
 
-tr:nth-child(odd){background-color:#ffaaaa} 
+tr:nth-child(odd){background-color:#6799A3} 
 
 .button1 {
-  background-color:#d4ee9f;
+  background-color:#AEE0C5;
   text-align:center;
   font-size:26px;
   border-radius:50%;
@@ -36,8 +36,8 @@ tr:nth-child(odd){background-color:#ffaaaa}
 
 .modal-content{
   background-color:#fefefe;
-  top:0;
-  left:20%;
+  top:200;
+  left:50%;
   height:80%;
   position:absolute;
   overflow-y:scroll;
@@ -45,22 +45,19 @@ tr:nth-child(odd){background-color:#ffaaaa}
 
 
 #THVtable{
-  width:40%;
+  width:10%;
   height:50%;
   display:inline-block;
+  white-space:nowrap;
 }
 
 #chart{
   width:700px;
   height:500px;
-
   float:right;
   vertical-align:top;
-
   display:inline-block;
-
 }
 
 #hztbl{
-
 }

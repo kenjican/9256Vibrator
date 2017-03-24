@@ -39,9 +39,15 @@ solution:
 (10):ttyUSB is not always the same after rebooted.
 solution:https://hallard.me/fixed-usb-dev-uteleinfo/ , but if customer replace with other USB-serial adapter,,,how to make the port number consistent?
 
+(11):power supply, Speaker plug in USB port and extract power from respbery Pi ,,,the program died..
+solution: DO NOT get power from raspberry. Use an isolate power supplyu for speaker.
+
+
 Idea:
 (1)Seperate all the controller ,vibrator into single file. Setup.json is a configuration file for integrating all the parts.
 
 (2) Make the best of human sensor,such as 眼耳鼻舌身意. Flash light or alarm color to attract attention. TTS voice to alert the present status or alert.mobile phone vibration to notice status.
 
 (3) How to protect the program? encrypt the SD card? or provide the usb-serial port and fix the serial number of USB serial chip?
+
+(4) Color Scheme: techonic , light , delight feeling..
