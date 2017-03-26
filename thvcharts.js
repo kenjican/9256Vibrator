@@ -68,7 +68,7 @@ dataZoom:[
    type:'slider',
    xAxisIndex:0,
    start:0,
-  end:25
+  end:100
   },
   {
     type:'inside',
@@ -178,7 +178,7 @@ function gethistory(ftdate){
         hpv[i] = da[i].data[1];
         tsv[i] = da[i].data[2];
         hsv[i] = da[i].data[3];
-        vhz[i] = da[i].data[4];
+        vhz[i] = parseInt(da[i].data[4]);
         }
 
      charData.setOption({

@@ -8,7 +8,8 @@ var value;
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 var serialP = require('serialport');
-
+var UBool = false;
+var VBool = false;
 
 /*
 Mongodb
@@ -63,6 +64,7 @@ function calvalue(va){
 
 function U8256gv(){
   U8256.write(setupjson.U8256.GetValue);
+  !UBool ? value = null:UBool = false;
 }  
 
 U8256.on('data',function(data){
@@ -82,6 +84,7 @@ U8256.on('data',function(data){
   uv.data.push(calvalue(parseInt(data.slice(17,21),16))/100);
   uv.data.push(hz);
   uv.save();
+  UBool = true;
   }
 });
 
@@ -96,7 +99,8 @@ vibrator
 */
 
 function VRun(hz){
-  console.log(hz.toString(10).length);
+ // console.log(hz.toString(10).length);
+ //DZVibrator.write(
 }
 
 function CheckCS(cyc,ste){
@@ -110,7 +114,7 @@ function CheckCS(cyc,ste){
 
 DZVibrator.on('error',function(err){
    console.log(err);
-}
+});
 
 
 

@@ -45,18 +45,22 @@ tr:nth-child(odd){background-color:#6799A3}
 
 
 #THVtable{
-  width:10%;
-  height:50%;
+  position:fixed;
+  width:30%;
+  height:70%;
+  float:left;
   display:inline-block;
   white-space:nowrap;
 }
 
 #chart{
-  width:700px;
-  height:500px;
+  position:fixed;
+  width:65%;
+  height:70%;
   float:right;
   vertical-align:top;
   display:inline-block;
+  z-index:-1;
 }
 
 #hztbl{

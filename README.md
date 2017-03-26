@@ -42,6 +42,8 @@ solution:https://hallard.me/fixed-usb-dev-uteleinfo/ , but if customer replace w
 (11):power supply, Speaker plug in USB port and extract power from respbery Pi ,,,the program died..
 solution: DO NOT get power from raspberry. Use an isolate power supplyu for speaker.
 
+(12):how to detect whether U8256,vibrator is power off? U8256 ,vibrator wont fire error even power is off
+solution: might event once work?
 
 Idea:
 (1)Seperate all the controller ,vibrator into single file. Setup.json is a configuration file for integrating all the parts.
