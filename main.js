@@ -1,6 +1,7 @@
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var setupjson = JSON.parse(fs.readFileSync('setup.json','utf8'));
+var dzv = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
 var express = require('express');
 var app = express();
 var net = require('net');
@@ -36,7 +37,6 @@ var U8256 = new serialP('/dev/U8256',{
   parser:serialP.parsers.readline('\r\n')
 });
 
-var dzv = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
 
 var DZVibrator = new serialP('/dev/vibrator',{
   baudRate:dzv.DZ.baudRate,
@@ -104,11 +104,13 @@ function VRun(hz){
 }
 
 function CheckCS(cyc,ste){
-  for(var i=0;i<setupjson.vibrator.Hz.length;i++){
-   if((setupjson.vibrator.Hz[i][0]==cyc) && (setupjson.vibrator.Hz[i][1]==ste)){
-     return setupjson.vibrator.Hz[i][2];
+  for(var i=0;i<dzv.DZ.Hz.length;i++){
+   if((dzv.DZ.Hz[i][0]==cyc) && (dzv.DZ.Hz[i][1]==ste)){
+     DZVibrator.write(dzv.DZ.Run + dzv.DZ.Hz[i][2] + dzv.DZ.Hz[i][3]);
+     return dzv.DZ.Hz[i][2];
     }
   }
+   DZVibrator.write("630005");
   return '000';
 }
 
@@ -116,7 +118,9 @@ DZVibrator.on('error',function(err){
    console.log(err);
 });
 
-
+DZVibrator.on('data',function(err){
+   console.log(err);
+});
 
 /*
 Web server
