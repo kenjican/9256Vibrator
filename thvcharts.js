@@ -23,6 +23,7 @@ $('#fDate').mobiscroll({
    yearText:'年',
    startYear:'2017',
    endYear:'2037',
+   showNow:true
 
 });
 $('#tDate').mobiscroll({
@@ -55,6 +56,7 @@ toolbox:{
       yAxisIndex:'none'
     },
     restore:{},
+    mark:{show:true},
     saveAsImage:{},
     dataView:{}
   }
@@ -90,8 +92,27 @@ dataZoom:[
   }
 ],
 legend:{
-  data:['温度PV','湿度PV','温度SV','湿度SV','震动Hz']
+  data:[{
+   name:'温度PV',
+   textStyle:{
+        color:'#ff0000'
+   }},
+   {name:'湿度PV',
+   textStyle:{
+        color:'#000080'
+   }},
+   {name:'温度SV',
+   textStyle:{
+         color:'#ff0000'
+   }},
+   {name:'湿度SV',
+    textStyle:{
+         color:'#000080'
+   }},
+   {name:'震动Hz'
+   }]
 },
+
 
 xAxis:{
   data:[]
@@ -153,7 +174,7 @@ data:[]
 });
 
 function gethis(){
-  if($('fDate').val() != '' && $('#tDate').val() != ''){
+  if($('#fDate').val() != '' && $('#tDate').val() != ''){
   charData.showLoading();
   var a = new Date($('#fDate').val());
   var b = new Date($('#tDate').val());
