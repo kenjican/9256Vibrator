@@ -65,6 +65,8 @@ toolbox:{
 tooltip:{
   trigger:'axis'
 },
+
+
 dataZoom:[
   {
    type:'slider',
@@ -115,9 +117,42 @@ legend:{
 
 
 xAxis:{
+  type:'category',
+  axisTick:{
+    alignWithLabel:true
+  },
   data:[]
 },
-yAxis:{},
+yAxis:[{
+  type:'value',
+  name:'温度 C',
+  position:'left',
+  axisLabel:{
+    formatter:'{value} °C '
+  }},
+  {
+  type:'value',
+  name:'湿度 %',
+  min:0,
+  max:100,
+  position:'right',
+  axisLabel:{
+    formatter:'{value} %'
+  }
+  },
+  {
+  type:'value',
+  name:'频率 Hz',
+  position:'right',
+  min:0,
+  max:127,
+  offset:40,
+  axisLabel:{
+    formatter:'{value} Hz'
+  }
+  }
+],
+
 series:[
 {name:'温度PV',
 type:'line',
@@ -132,6 +167,7 @@ data:[]
 },
 {name:'湿度PV',
  type:'line',
+ yAxisIndex:1,
  itemStyle:{
   normal:{
     lineStyle:{
@@ -139,6 +175,7 @@ data:[]
     }
   }
 },
+//symbol:'dashed',
  data:[]
 },
 {name:'温度SV',
@@ -155,6 +192,7 @@ data:[]
 },
 {name:'湿度SV',
  type:'line',
+ yAxisIndex:1,
  itemStyle:{
    normal:{
      lineStyle:{
@@ -167,6 +205,7 @@ data:[]
 },
 {name:'震动Hz',
  type:'bar',
+ yAxisIndex:2,
  data:[]
  }
 ]

@@ -1,5 +1,4 @@
 {
-"v1.4":{
    "GetValue":"@010140*\r\n",
    "run":"@015301177*\r\n",
    "stop":"@015302174*\r\n",
@@ -9,6 +8,4 @@
    "stopBits":1,
    "dataBits":8,
    "parity":"even" 
-  }
 }
-

@@ -1,9 +1,8 @@
 {
-   "System":{
-   "Timer":1,
-   "SMS":"",
-   "Speaker":""
-
+"System":{
+ "Timer":1,
+  "SMS":"",
+  "Speaker":""
   },
 
   "U9226":{

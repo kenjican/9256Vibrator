@@ -19,7 +19,7 @@ Mongodb
 var db = mongoose.createConnection('localhost','U8256V');
 
 var U8256Scm = new mongoose.Schema({
-   data:[]
+data:[]
 }); 
 
 var UVData = db.model('UVData',U8256Scm);
@@ -30,9 +30,9 @@ var UVData = db.model('UVData',U8256Scm);
 8256 serial port communication
 */
 var U8256 = new serialP('/dev/U8256',{
-  baudRate:setupjson.U8256.baudRate,
-  dataBits:setupjson.U8256.dataBits,
-  stopBits:setupjson.U8256.stopBits,
+baudRate:setupjson.U8256.baudRate,
+dataBits:setupjson.U8256.dataBits,
+stopBits:setupjson.U8256.stopBits,
   parity:setupjson.U8256.parity,
   parser:serialP.parsers.readline('\r\n')
 });
