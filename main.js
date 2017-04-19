@@ -13,6 +13,27 @@ var UBool = false;
 var VBool = false;
 
 /*
+vibrator class
+*/
+
+class jsp{
+  constructor(mno){
+    this.mno = mno;
+    this.hz = null;
+  }
+
+  getHz(){
+     DZVibrator.write('P,01,57\r');
+     //console.log('get called');
+  }
+
+}
+
+var jsp01 = new jsp('01');
+
+
+
+/*
 Mongodb
 */
 
@@ -75,7 +96,7 @@ U8256.on('data',function(data){
   ste = parseInt(data.slice(29,33),16);
   var hz = CheckCS(cyc,ste);
   
-  value = data + hz;  
+  value = data + jsp01.hz;  
   
   var uv = new UVData({data:[]});
   uv.data.push(calvalue(parseInt(data.slice(5,9),16))/100);
@@ -97,11 +118,12 @@ U8256.on('error',function(err){
 /*
 vibrator
 */
-
+/*
 function DZVibratorGV(){
   DZVbrator.write("R,01,57\r");
 
 }
+*/
 
 function VRun(hz){
  // console.log(hz.toString(10).length);
@@ -111,7 +133,7 @@ function VRun(hz){
 function CheckCS(cyc,ste){
   for(var i=0;i<dzv.DZ.Hz.length;i++){
    if((dzv.DZ.Hz[i][0]==cyc) && (dzv.DZ.Hz[i][1]==ste)){
-     DZVibrator.write(dzv.DZ.Run + dzv.DZ.Hz[i][2] + "\r");
+     //DZVibrator.write(dzv.DZ.Run + dzv.DZ.Hz[i][2] + "\r");
      return dzv.DZ.Hz[i][2];
     }
   }
@@ -126,7 +148,8 @@ DZVibrator.on('error',function(err){
 DZVibrator.on('data',function(data){
    console.log(data);
    let a = data.split(",");
-   console.log(a[4].slice(0,3));
+   jsp01.Hz =a[4].slice(0,3);
+   console.log(jsp01.Hz);
 });
 
 /*
@@ -197,6 +220,7 @@ Scheduler, 1Hz
 function schd(){
    //client.write(mbs);
    U8256gv();
+   jsp01.getHz();
 }
 
 /*
