@@ -94,7 +94,7 @@ U8256.on('data',function(data){
   var ste;
   cyc = parseInt(data.slice(36,40),16) - parseInt(data.slice(40,44),16);
   ste = parseInt(data.slice(29,33),16);
-  var hz = CheckCS(cyc,ste);
+  //var hz = CheckCS(cyc,ste);
   
   value = data + jsp01.hz;  
   
@@ -103,7 +103,7 @@ U8256.on('data',function(data){
   uv.data.push(calvalue(parseInt(data.slice(9,13),16))/100);
   uv.data.push(calvalue(parseInt(data.slice(13,17),16))/100);
   uv.data.push(calvalue(parseInt(data.slice(17,21),16))/100);
-  uv.data.push(hz);
+  uv.data.push(jsp01.hz);
   uv.save();
   UBool = true;
   }
