@@ -121,7 +121,8 @@ function hzsetup(){
 
       hztbl.children[i].children[0].innerHTML = c[i][0];
       hztbl.children[i].children[1].innerHTML = c[i][1];
-      hztbl.children[i].children[2].innerHTML = parseInt(c[i][2]);
+      //hztbl.children[i].children[2].innerHTML = parseInt(c[i][2]);
+      hztbl.children[i].children[2].innerHTML = parseInt(c[i][2].substr(0,3));
 
    }
  }
@@ -164,8 +165,8 @@ function hzsave(){
          alert('频率不得大于127');
          return;
         }
-      cellarray.push(zerolead.substr(-3,3));
-      cellarray.push(getfs(zerolead.substr(-3,3)).toString());      
+      cellarray.push(zerolead.substr(-3,3) + '00');
+      //cellarray.push(getfs(zerolead.substr(-3,3)).toString());      
       hzarray.push(cellarray);
     } 
   } else {

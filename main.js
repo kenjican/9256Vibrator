@@ -38,12 +38,12 @@ stopBits:setupjson.U8256.stopBits,
 });
 
 
-var DZVibrator = new serialP('/dev/vibrator',{
+var DZVibrator = new serialP('/dev/ttyUSB1',{
   baudRate:dzv.DZ.baudRate,
   dataBits:dzv.DZ.dataBits,
   stopBits:dzv.DZ.stopBits,
   parity:dzv.DZ.parity,
-  parser:serialP.parsers.readline('\r\n')
+  parser:serialP.parsers.readline('\r')
 });
 
 
@@ -98,6 +98,11 @@ U8256.on('error',function(err){
 vibrator
 */
 
+function DZVibratorGV(){
+  DZVbrator.write("R,01,57\r");
+
+}
+
 function VRun(hz){
  // console.log(hz.toString(10).length);
  //DZVibrator.write(
@@ -106,11 +111,11 @@ function VRun(hz){
 function CheckCS(cyc,ste){
   for(var i=0;i<dzv.DZ.Hz.length;i++){
    if((dzv.DZ.Hz[i][0]==cyc) && (dzv.DZ.Hz[i][1]==ste)){
-     DZVibrator.write(dzv.DZ.Run + dzv.DZ.Hz[i][2] + dzv.DZ.Hz[i][3]);
+     DZVibrator.write(dzv.DZ.Run + dzv.DZ.Hz[i][2] + "\r");
      return dzv.DZ.Hz[i][2];
     }
   }
-   DZVibrator.write("630005");
+   DZVibrator.write("C,01,00,00000\r");
   return '000';
 }
 
@@ -118,8 +123,10 @@ DZVibrator.on('error',function(err){
    console.log(err);
 });
 
-DZVibrator.on('data',function(err){
-   console.log(err);
+DZVibrator.on('data',function(data){
+   console.log(data);
+   let a = data.split(",");
+   console.log(a[4].slice(0,3));
 });
 
 /*
