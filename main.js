@@ -13,25 +13,122 @@ var UBool = false;
 var VBool = false;
 
 /*
+USB Serial port
+*/
+var port1 = new serialP('/dev/ttyUSB0',{
+  baudRate:setupjson.U8256.baudRate,
+  dataBits:setupjson.U8256.dataBits,
+  stopBits:setupjson.U8256.stopBits,
+  parity:setupjson.U8256.parity,
+  parser:serialP.parsers.readline('\r\n')
+});
+
+port1.on('data',function(data){
+  U825601.parseValue(data);
+});
+
+port1.on('error',function(err){
+  console.log(err);
+});
+
+var port2 = new serialP('/dev/ttyUSB1',{
+  baudRate:dzv.DZ.baudRate,
+  dataBits:dzv.DZ.dataBits,
+  stopBits:dzv.DZ.stopBits,
+  parity:dzv.DZ.parity,
+  parser:serialP.parsers.readline('\r')
+});
+
+port2.on('data',function(data){
+   jsp01.parseValue(data);
+});
+
+
+/*
 vibrator class
 */
 
 class jsp{
   constructor(mno){
     this.mno = mno;
-    this.hz = null;
+    this.Hz = null;
   }
 
   getHz(){
-     DZVibrator.write('P,01,57\r');
-     //console.log('get called');
+     port2.write('R,01,57\r');
   }
 
+  setHz(data){
+     port2.write('C,01,02,00500\r');
+  }
+
+  parseValue(data){
+     console.log(data);
+     this.Hz = data.split(',')[4].slice(0,3);
+  }
 }
 
 var jsp01 = new jsp('01');
 
+/*
+U8256 class
+*/
 
+class U8256{
+  constructor(mno){
+    this.mno = mno;
+  }
+
+  getValue(){
+     port1.write(setupjson.U8256.GetValue);
+  }  
+
+  calValue(va){
+     if(va < 32767) {
+       return va;
+     }else{
+       va = va - 65536;
+       if(va > -20000){
+         return va;
+      }else{
+      return "-";
+      }
+    }
+  }
+
+  parseValue(data){
+    //console.log(data);    
+    this.TPV = this.calValue(parseInt(data.slice(5,9),16))/100;
+    this.HPV = this.calValue(parseInt(data.slice(9,13),16))/100;
+    this.TSV = this.calValue(parseInt(data.slice(13,17),16))/100;
+    this.HSV = this.calValue(parseInt(data.slice(17,21),16))/100;
+    this.Steps = parseInt(data.slice(29,33),16);
+    this.Patterns = parseInt(data.slice(33,35),16);
+    this.AllCycles = parseInt(data.slice(36,40),16);
+    this.LeftCycles = parseInt(data.slice(40,44),16);
+    this.TMV =  parseInt(data.slice(66,68),16);
+    this.HMV = parseInt(data.slice(70,72),16);
+  }
+
+
+}
+
+var U825601 = new U8256('01');
+
+/*
+Intergrator , to cooridnate U8256 and Vibrator;
+*/
+
+class Coordinator{
+  getValue(){
+    U825601.getValue();
+    jsp01.getHz();
+    //schd();
+  } 
+
+}
+
+var Coordinator1 = new Coordinator();
 
 /*
 Mongodb
@@ -48,88 +145,6 @@ var UVData = db.model('UVData',U8256Scm);
 
 
 /*
-8256 serial port communication
-*/
-var U8256 = new serialP('/dev/U8256',{
-baudRate:setupjson.U8256.baudRate,
-dataBits:setupjson.U8256.dataBits,
-stopBits:setupjson.U8256.stopBits,
-  parity:setupjson.U8256.parity,
-  parser:serialP.parsers.readline('\r\n')
-});
-
-
-var DZVibrator = new serialP('/dev/ttyUSB1',{
-  baudRate:dzv.DZ.baudRate,
-  dataBits:dzv.DZ.dataBits,
-  stopBits:dzv.DZ.stopBits,
-  parity:dzv.DZ.parity,
-  parser:serialP.parsers.readline('\r')
-});
-
-
-
-function calvalue(va){
-  if(va < 32767){
-    return va;
-  }else{
-    va = va -65536;
-    if (va > -20000){
-       return va;
-    }else{
-       return '';
-    }
-  }
-}
-
-
-function U8256gv(){
-  U8256.write(setupjson.U8256.GetValue);
-  !UBool ? value = null:UBool = false;
-}  
-
-U8256.on('data',function(data){
-  if(data.length > 15){
-  var cyc;
-  var ste;
-  cyc = parseInt(data.slice(36,40),16) - parseInt(data.slice(40,44),16);
-  ste = parseInt(data.slice(29,33),16);
-  //var hz = CheckCS(cyc,ste);
-  
-  value = data + jsp01.hz;  
-  
-  var uv = new UVData({data:[]});
-  uv.data.push(calvalue(parseInt(data.slice(5,9),16))/100);
-  uv.data.push(calvalue(parseInt(data.slice(9,13),16))/100);
-  uv.data.push(calvalue(parseInt(data.slice(13,17),16))/100);
-  uv.data.push(calvalue(parseInt(data.slice(17,21),16))/100);
-  uv.data.push(jsp01.hz);
-  uv.save();
-  UBool = true;
-  }
-});
-
-U8256.on('error',function(err){
-  console.log(err);
-});
-
-
-
-/*
-vibrator
-*/
-/*
-function DZVibratorGV(){
-  DZVbrator.write("R,01,57\r");
-
-}
-*/
-
-function VRun(hz){
- // console.log(hz.toString(10).length);
- //DZVibrator.write(
-}
-
 function CheckCS(cyc,ste){
   for(var i=0;i<dzv.DZ.Hz.length;i++){
    if((dzv.DZ.Hz[i][0]==cyc) && (dzv.DZ.Hz[i][1]==ste)){
@@ -141,16 +156,13 @@ function CheckCS(cyc,ste){
   return '000';
 }
 
-DZVibrator.on('error',function(err){
-   console.log(err);
-});
-
 DZVibrator.on('data',function(data){
    console.log(data);
    let a = data.split(",");
    jsp01.Hz =a[4].slice(0,3);
    console.log(jsp01.Hz);
 });
+*/
 
 /*
 Web server
@@ -218,10 +230,16 @@ app.listen(8888);
 Scheduler, 1Hz
 */
 function schd(){
-   //client.write(mbs);
-   U8256gv();
-   jsp01.getHz();
+
+  for(let keys in U825601){
+      console.log(keys + ": " + U825601[keys]);
+  }
+  
+  for(let keys in jsp01){
+      console.log(keys + ": " + jsp01[keys]);
+  }
 }
+
 
 /*
 Config system parameters
@@ -237,6 +255,6 @@ app.get('/GetVibrator',function(req,res){
 }
 );
 
-var t1 = setInterval(schd,setupjson.scheduler);
+var t1 = setInterval(Coordinator1.getValue,1000);
 
 
