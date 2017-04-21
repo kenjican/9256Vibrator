@@ -9,8 +9,6 @@ var value;
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 var serialP = require('serialport');
-var UBool = false;
-var VBool = false;
 
 /*
 USB Serial port
@@ -40,15 +38,18 @@ var port2 = new serialP('/dev/ttyUSB1',{
 });
 
 port2.on('data',function(data){
-   jsp01.parseValue(data);
+   jps01.parseValue(data);
 });
 
+port2.on('error',function(err){
+   console.log(err);
+});
 
 /*
 vibrator class
 */
 
-class jsp{
+class jps{
   constructor(mno){
     this.mno = mno;
     this.Hz = null;
@@ -63,12 +64,13 @@ class jsp{
   }
 
   parseValue(data){
-     console.log(data);
+     //console.log(data);
      this.Hz = data.split(',')[4].slice(0,3);
+     //console.log(this.Hz);
   }
 }
 
-var jsp01 = new jsp('01');
+var jps01 = new jps('01');
 
 /*
 U8256 class
@@ -106,6 +108,8 @@ class U8256{
     this.Patterns = parseInt(data.slice(33,35),16);
     this.AllCycles = parseInt(data.slice(36,40),16);
     this.LeftCycles = parseInt(data.slice(40,44),16);
+    this.AllPCycles= parseInt(data.slice(44,48),16);
+    this.LeftPCycles = parseInt(data.slice(48,52),16);
     this.TMV =  parseInt(data.slice(66,68),16);
     this.HMV = parseInt(data.slice(70,72),16);
   }
@@ -120,11 +124,23 @@ Intergrator , to cooridnate U8256 and Vibrator;
 */
 
 class Coordinator{
+  constructor(){
+    let table = JSON.parse(fs.readFileSync('config/coordinator.json','utf8'));
+    this.Hztable = table.PCycles;
+    table = null;
+  }
+
   getValue(){
+    
     U825601.getValue();
-    jsp01.getHz();
+    jps01.getHz();
+
     //schd();
   } 
+
+  CheckCSHz(){
+    
+  }
 
 }
 
@@ -159,8 +175,8 @@ function CheckCS(cyc,ste){
 DZVibrator.on('data',function(data){
    console.log(data);
    let a = data.split(",");
-   jsp01.Hz =a[4].slice(0,3);
-   console.log(jsp01.Hz);
+   jps01.Hz =a[4].slice(0,3);
+   console.log(jps01.Hz);
 });
 */
 
@@ -230,14 +246,7 @@ app.listen(8888);
 Scheduler, 1Hz
 */
 function schd(){
-
-  for(let keys in U825601){
-      console.log(keys + ": " + U825601[keys]);
-  }
-  
-  for(let keys in jsp01){
-      console.log(keys + ": " + jsp01[keys]);
-  }
+  console.log(U825601.LeftPCycles);
 }
 
 
