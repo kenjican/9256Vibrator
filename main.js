@@ -60,12 +60,13 @@ class jps{
   }
 
   setHz(data){
-     port2.write('C,01,02,00500\r');
+     console.log(data + 'setHz');
+     port2.write('C,01,02,' + data + '\r');
   }
 
   parseValue(data){
      //console.log(data);
-     this.Hz = data.split(',')[4].slice(0,3);
+     this.Hz = data.split(',')[4];
      //console.log(this.Hz);
   }
 }
@@ -109,6 +110,7 @@ class U8256{
     this.AllCycles = parseInt(data.slice(36,40),16);
     this.LeftCycles = parseInt(data.slice(40,44),16);
     this.AllPCycles= parseInt(data.slice(44,48),16);
+    this.NowPCycles = this.AllPCycles - this.LeftPCycles;
     this.LeftPCycles = parseInt(data.slice(48,52),16);
     this.TMV =  parseInt(data.slice(66,68),16);
     this.HMV = parseInt(data.slice(70,72),16);
@@ -125,26 +127,51 @@ Intergrator , to cooridnate U8256 and Vibrator;
 
 class Coordinator{
   constructor(){
-    let table = JSON.parse(fs.readFileSync('config/coordinator.json','utf8'));
-    this.Hztable = table.PCycles;
-    table = null;
+    this.Hz = null;
+    this.Steps = null;
   }
 
   getValue(){
-    
     U825601.getValue();
     jps01.getHz();
-
-    //schd();
+    schd();
   } 
 
   CheckCSHz(){
-    
-  }
-
+    if (this.Steps == U825601.Steps){
+      U825601.getValue();
+      jps01.getHz();
+      schd();
+    }else{
+      this.Steps = U825601.Steps;
+      for(let i = 0;i<Hztable01.Hzt.length;i++){
+        if((U825601.NowPCycles == Hztable01.Hzt[i][0]) && (U825601.Steps == Hztable01.Hzt[i][1])){
+	   //console.log(Hztable01.Hzt[i][2]);
+	   jps01.setHz(Hztable01.Hzt[i][2]);
+	   return false;
+  	}
+	}
+      jps01.setHz('00000');
+      U825601.getValue();
+      jps01.getHz();
+      schd();
+    }
+    }
+  
 }
 
 var Coordinator1 = new Coordinator();
+
+class Hztable{
+  constructor(){
+    let table = JSON.parse(fs.readFileSync('config/coordinator.json','utf8'));
+    var Hzt = new Array();
+    this.Hzt = table.PCycles;
+    table = null;
+  }
+}
+
+var Hztable01 = new Hztable();
 
 /*
 Mongodb
@@ -160,25 +187,6 @@ var UVData = db.model('UVData',U8256Scm);
 
 
 
-/*
-function CheckCS(cyc,ste){
-  for(var i=0;i<dzv.DZ.Hz.length;i++){
-   if((dzv.DZ.Hz[i][0]==cyc) && (dzv.DZ.Hz[i][1]==ste)){
-     //DZVibrator.write(dzv.DZ.Run + dzv.DZ.Hz[i][2] + "\r");
-     return dzv.DZ.Hz[i][2];
-    }
-  }
-   DZVibrator.write("C,01,00,00000\r");
-  return '000';
-}
-
-DZVibrator.on('data',function(data){
-   console.log(data);
-   let a = data.split(",");
-   jps01.Hz =a[4].slice(0,3);
-   console.log(jps01.Hz);
-});
-*/
 
 /*
 Web server
@@ -246,7 +254,7 @@ app.listen(8888);
 Scheduler, 1Hz
 */
 function schd(){
-  console.log(U825601.LeftPCycles);
+  console.log(jps01.Hz);
 }
 
 
@@ -263,7 +271,13 @@ app.get('/GetVibrator',function(req,res){
    res.end;  
 }
 );
-
-var t1 = setInterval(Coordinator1.getValue,1000);
-
-
+/*
+setTimeout(function(){
+port2.write('W,01,15,15000\r');
+port2.write('W,01,16,00000\r');
+},5000);
+*/
+//setTimeout(function(){jps01.setHz('00000')},5000);
+var t1 = setInterval(Coordinator1.CheckCSHz,1000);
+//var t1 = setInterval(schd,1000);
+//console.log(Hztable01.Hzt[1][2]);

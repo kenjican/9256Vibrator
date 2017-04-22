@@ -51,6 +51,12 @@ solution: no
 (14): To fit all devices with different resoltuion,screen size
 solution: responsive web design
 
+(15):JPS inverter write parameters.The default setting is write-protect
+soluton:
+set Pr 95 to 00000, Pr 96 to 00001 ,then all the R/W FR/W could be changed.
+
+(16):JPS PDAN-2022 Hz upper and lower limit is 06000 ,00300.How to change to 10000 ,00000. make the uppler limit 100Hz, lower limit 0 hz
+solution: set Pr 15 to 10000 , Pr 16 to 00000
 
 Idea:
 (1)Seperate all the controller ,vibrator into single file. Setup.json is a configuration file for integrating all the parts.
