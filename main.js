@@ -5,7 +5,6 @@ var dzv = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
 var express = require('express');
 var app = express();
 var net = require('net');
-var value;
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 var serialP = require('serialport');
@@ -22,7 +21,8 @@ var port1 = new serialP('/dev/ttyUSB0',{
 });
 
 port1.on('data',function(data){
-  U825601.parseValue(data);
+  //U825601.parseValue(data);
+  U825601.parseJson(data);
 });
 
 port1.on('error',function(err){
@@ -60,7 +60,7 @@ class jps{
   }
 
   setHz(data){
-     console.log(data + 'setHz');
+     //console.log(data + 'setHz');
      port2.write('C,01,02,' + data + '\r');
   }
 
@@ -80,6 +80,7 @@ U8256 class
 class U8256{
   constructor(mno){
     this.mno = mno;
+    this.status = {};
   }
 
   getValue(){
@@ -98,9 +99,9 @@ class U8256{
       }
     }
   }
-
+/*
   parseValue(data){
-    //console.log(data);    
+    this.alldata = data;    
     this.TPV = this.calValue(parseInt(data.slice(5,9),16))/100;
     this.HPV = this.calValue(parseInt(data.slice(9,13),16))/100;
     this.TSV = this.calValue(parseInt(data.slice(13,17),16))/100;
@@ -115,7 +116,26 @@ class U8256{
     this.TMV =  parseInt(data.slice(66,68),16);
     this.HMV = parseInt(data.slice(70,72),16);
   }
+*/
+  parseJson(data){
+    this.status.TPV = this.calValue(parseInt(data.slice(5,9),16))/100;
+    this.status.HPV = this.calValue(parseInt(data.slice(9,13),16))/100;
+    this.status.TSV = this.calValue(parseInt(data.slice(13,17),16))/100;
+    this.status.HSV = this.calValue(parseInt(data.slice(17,21),16))/100;
+    this.status.Steps = parseInt(data.slice(29,33),16);
+    this.status.Patterns = parseInt(data.slice(33,35),16);
+    this.status.AllCycles = parseInt(data.slice(36,40),16);
+    this.status.LeftCycles = parseInt(data.slice(40,44),16);
+    this.status.AllPCycles= parseInt(data.slice(44,48),16);
+    this.status.LeftPCycles = parseInt(data.slice(48,52),16);
+    this.status.HourLeft = parseInt(data.slice(60,64),16);
+    this.status.NowPCycles = this.status.AllPCycles - this.status.LeftPCycles;
+    this.status.MinLeft = parseInt(data.slice(64,66),16);
+    this.status.TMV =  parseInt(data.slice(66,68),16);
+    this.status.HMV = parseInt(data.slice(70,72),16);
+    this.status.Hz = jps01.Hz;
 
+  }
 
 }
 
@@ -138,14 +158,15 @@ class Coordinator{
   } 
 
   CheckCSHz(){
-    if (this.Steps == U825601.Steps){
+    if (this.Steps == U825601.status.Steps){
       U825601.getValue();
       jps01.getHz();
       schd();
     }else{
-      this.Steps = U825601.Steps;
+      this.Steps = U825601.status.Steps;
+      console.log(U825601.status.NowPCycles);
       for(let i = 0;i<Hztable01.Hzt.length;i++){
-        if((U825601.NowPCycles == Hztable01.Hzt[i][0]) && (U825601.Steps == Hztable01.Hzt[i][1])){
+        if((U825601.status.NowPCycles == Hztable01.Hzt[i][0]) && (U825601.status.Steps == Hztable01.Hzt[i][1])){
 	   //console.log(Hztable01.Hzt[i][2]);
 	   jps01.setHz(Hztable01.Hzt[i][2]);
 	   return false;
@@ -201,20 +222,21 @@ app.get('/',function(req,res){
 });
 
 app.get('/getvalue',function(req,res){
-  res.send(value);
+  res.send(U825601.status);
+  //console.log(U825601.alldata);
   res.end;
 });
 
 app.get('/run',function(req,res){
-  U8256.write(setupjson.U8256.run);
+  port1.write(setupjson.U8256.run);
 });
 
 app.get('/stop',function(req,res){
-  U8256.write(setupjson.U8256.stop);
+  port1.write(setupjson.U8256.stop);
 });
 
 app.get('/steps',function(req,res){
-  U8256.write(setupjson.U8256.steps);
+  port1.write(setupjson.U8256.steps);
 });
 
 app.get('/holds',function(req,res){
