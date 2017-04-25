@@ -22,7 +22,16 @@ var port1 = new serialP('/dev/ttyUSB0',{
 });
 
 port1.on('data',function(data){
-  U825601.parseValue(data);
+  switch (data.slice(3,5)){
+  case '01':
+    port1.write('@015145*\r');
+    U825601.parseAna(data);
+  case '51':
+    U825601.parseDig(data);
+    break;
+  default:
+    break;
+  }
 });
 
 port1.on('error',function(err){
@@ -80,6 +89,8 @@ U8256 class
 class U8256{
   constructor(mno){
     this.mno = mno;
+    this.analogData = '';
+    this.digitalData = '';
   }
 
   getValue(){
@@ -99,23 +110,20 @@ class U8256{
     }
   }
 
-  parseValue(data){
-    //console.log(data);    
-    this.TPV = this.calValue(parseInt(data.slice(5,9),16))/100;
+  parseAna(data){
+    this.analogData = data.slice(5,74);    
+    this.TPV =  this.calValue(parseInt(data.slice(5,9),16))/100;
     this.HPV = this.calValue(parseInt(data.slice(9,13),16))/100;
     this.TSV = this.calValue(parseInt(data.slice(13,17),16))/100;
     this.HSV = this.calValue(parseInt(data.slice(17,21),16))/100;
     this.Steps = parseInt(data.slice(29,33),16);
     this.Patterns = parseInt(data.slice(33,35),16);
-    this.AllCycles = parseInt(data.slice(36,40),16);
-    this.LeftCycles = parseInt(data.slice(40,44),16);
-    this.AllPCycles= parseInt(data.slice(44,48),16);
-    this.NowPCycles = this.AllPCycles - this.LeftPCycles;
-    this.LeftPCycles = parseInt(data.slice(48,52),16);
-    this.TMV =  parseInt(data.slice(66,68),16);
-    this.HMV = parseInt(data.slice(70,72),16);
+    this.NowPCycles =  parseInt(data.slice(44,48),16) - parseInt(data.slice(48,52),16);
   }
 
+  parseDig(data){
+    this.digitalData = data.slice(5,17);
+  }
 
 }
 
@@ -164,9 +172,9 @@ var Coordinator1 = new Coordinator();
 
 class Hztable{
   constructor(){
-    let table = JSON.parse(fs.readFileSync('config/coordinator.json','utf8'));
+    let table = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
     var Hzt = new Array();
-    this.Hzt = table.PCycles;
+    this.Hzt = table.DZ.PCycles;
     table = null;
   }
 }
@@ -201,29 +209,29 @@ app.get('/',function(req,res){
 });
 
 app.get('/getvalue',function(req,res){
-  res.send(value);
+  res.send(U825601.analogData + U825601.digitalData + jps01.Hz);
   res.end;
 });
 
 app.get('/run',function(req,res){
-  U8256.write(setupjson.U8256.run);
+  port1.write(setupjson.U8256.run);
 });
 
 app.get('/stop',function(req,res){
-  U8256.write(setupjson.U8256.stop);
+  port1.write(setupjson.U8256.stop);
 });
 
 app.get('/steps',function(req,res){
-  U8256.write(setupjson.U8256.steps);
+  port1.write(setupjson.U8256.steps);
 });
 
 app.get('/holds',function(req,res){
-  U8256.write(setupjson.U8256.holds);
+  port1.write(setupjson.U8256.holds);
 });
 
 app.post('/hzsave', function(req,res){
   var vfile = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
-  vfile.DZ.Hz = req.body;
+  vfile.DZ.PCycles = req.body;
   fs.writeFile('config/vibrator.json',JSON.stringify(vfile),function(err){
      if(err) console.log(err);
     }
@@ -254,7 +262,7 @@ app.listen(8888);
 Scheduler, 1Hz
 */
 function schd(){
-  console.log(jps01.Hz);
+  //console.log(jps01.Hz);
 }
 
 
@@ -267,7 +275,7 @@ app.get('/GetVibrator',function(req,res){
    var getv = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
    //console.log(getv.DZ.Hz);
    res.header('Content-Type','application/json');
-   res.send(getv.DZ.Hz);
+   res.send(getv.DZ.PCycles);
    res.end;  
 }
 );
