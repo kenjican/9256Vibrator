@@ -26,6 +26,7 @@ port1.on('data',function(data){
   case '01':
     port1.write('@015145*\r');
     U825601.parseAna(data);
+    break;
   case '51':
     U825601.parseDig(data);
     break;
@@ -76,7 +77,7 @@ class jps{
   parseValue(data){
      //console.log(data);
      this.Hz = data.split(',')[4];
-     //console.log(this.Hz);
+     console.log(this.Hz);
   }
 }
 
@@ -165,19 +166,20 @@ class Coordinator{
           this.Steps = U825601.Steps;
           for(let i = 0;i<Hztable01.Hzt.length;i++){
              if((U825601.NowPCycles == Hztable01.Hzt[i][0]) && (U825601.Steps == Hztable01.Hzt[i][1])){
-//	       console.log(Hztable01.Hzt[i][2]);
+	       console.log(Hztable01.Hzt[i][2]);
 	       jps01.setHz(Hztable01.Hzt[i][2]);
 	       return false;
   	     }
            }
-          jps01.setHz('00000');
+          jps01.setHz("00000");
+	  console.log('be set to zeon');
         }
     }else{
-      if(jps01.Hz !='00000'){
-	jps01.setHz('00000');
+       console.log('stopped');
+      //if(jps01.Hz !='00000'){
+	//jps01.setHz('00000');
       }
     }
-   }  
 }
 
 var Coordinator1 = new Coordinator();
@@ -266,9 +268,11 @@ app.get('/gethis/:fDate/:tDate',function(req,res){
  });
 
 
-app.get('/tests',function(req,res){
-  res.send(setupjson.vibrator.Hz.length.toString(10));
-  res.end;
+app.get('/tests/:hz',function(req,res){
+   //port2.write(req.params.hz);
+	jps01.setHz(req.params.hz);
+//  res.send(setupjson.vibrator.Hz.length.toString(10));
+//  res.end;
 });
 
 
