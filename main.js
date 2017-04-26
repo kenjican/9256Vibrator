@@ -123,8 +123,13 @@ class U8256{
 
   parseDig(data){
     this.digitalData = data.slice(5,17);
+    this.status = this.digitalData.slice(0,4);
+    if(this.status == '0001' || this.status == '0011'){
+	this.running = true;
+    }else{
+	this.running = false;
+    }
   }
-
 }
 
 var U825601 = new U8256('01');
@@ -142,36 +147,50 @@ class Coordinator{
   getValue(){
     U825601.getValue();
     jps01.getHz();
-    schd();
-  } 
-
-  CheckCSHz(){
-    if (this.Steps == U825601.Steps){
-      U825601.getValue();
-      jps01.getHz();
-      schd();
+    if(U825601.running){
+       this.CheckCSHz();
     }else{
-      this.Steps = U825601.Steps;
-      for(let i = 0;i<Hztable01.Hzt.length;i++){
-        if((U825601.NowPCycles == Hztable01.Hzt[i][0]) && (U825601.Steps == Hztable01.Hzt[i][1])){
-	   //console.log(Hztable01.Hzt[i][2]);
-	   jps01.setHz(Hztable01.Hzt[i][2]);
-	   return false;
-  	}
-	}
-      jps01.setHz('00000');
+       if(jps01.Hz != '00000')
+	  console.log('not running');
+	  jps01.setHz('00000');
+       }
+    }
+   
+
+   CheckCSHz(){
       U825601.getValue();
       jps01.getHz();
-      schd();
+      if(U825601.running){
+        if(this.Steps != U825601.Steps){
+          this.Steps = U825601.Steps;
+          for(let i = 0;i<Hztable01.Hzt.length;i++){
+             if((U825601.NowPCycles == Hztable01.Hzt[i][0]) && (U825601.Steps == Hztable01.Hzt[i][1])){
+//	       console.log(Hztable01.Hzt[i][2]);
+	       jps01.setHz(Hztable01.Hzt[i][2]);
+	       return false;
+  	     }
+           }
+          jps01.setHz('00000');
+        }
+    }else{
+      if(jps01.Hz !='00000'){
+	jps01.setHz('00000');
+      }
     }
-    }
-  
+   }  
 }
 
 var Coordinator1 = new Coordinator();
 
 class Hztable{
   constructor(){
+    let table = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
+    var Hzt = new Array();
+    this.Hzt = table.DZ.PCycles;
+    table = null;
+  } 
+
+  reload(){
     let table = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
     var Hzt = new Array();
     this.Hzt = table.DZ.PCycles;
@@ -234,9 +253,8 @@ app.post('/hzsave', function(req,res){
   vfile.DZ.PCycles = req.body;
   fs.writeFile('config/vibrator.json',JSON.stringify(vfile),function(err){
      if(err) console.log(err);
-    }
-);
- // console.log(req.body);
+    });
+  jps01.reload();
 });
 
 app.get('/gethis/:fDate/:tDate',function(req,res){
