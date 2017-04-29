@@ -228,7 +228,7 @@ function savemongo(){
   uv.data.push(U825601.HPV);
   uv.data.push(U825601.TSV);
   uv.data.push(U825601.HSV);
-  uv.data.push(jps01.Hz);
+  uv.data.push(parseInt(jps01.Hz)/100);
   uv.save();
 
 }
@@ -250,7 +250,7 @@ app.get('/getvalue',function(req,res){
   res.send(U825601.analogData + U825601.digitalData + jps01.Hz);
   res.end;
 });
-
+/*
 app.get('/run',function(req,res){
   port1.write(setupjson.U8256.run);
 });
@@ -266,7 +266,7 @@ app.get('/steps',function(req,res){
 app.get('/holds',function(req,res){
   port1.write(setupjson.U8256.holds);
 });
-
+*/
 app.post('/hzsave', function(req,res){
   var vfile = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
   vfile.DZ.PCycles = req.body;
@@ -287,7 +287,8 @@ app.get('/gethis/:fDate/:tDate',function(req,res){
 
 
 app.get('/tests/:hz',function(req,res){
-   //port2.write(req.params.hz);
+  //port2.write('C,01,00\r');
+     //port2.write(req.params.hz);
 	jps01.setHz(req.params.hz);
 //  res.send(setupjson.vibrator.Hz.length.toString(10));
 //  res.end;
