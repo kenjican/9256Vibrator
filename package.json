@@ -10,10 +10,17 @@
   ],
   "main": "topClient.js",
   "dependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
     "nodemailer": "^4.0.1",
+    "socket.io": "^1.7.3",
     "urllib": "^2.22.0"
   },
   "engines": {
     "node": ">=0.8"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-plugin-jsx-a11y": "^5.0.0"
   }
 }

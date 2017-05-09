@@ -9,6 +9,8 @@ var value;
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 var serialP = require('serialport');
+const OYO = require('./OYOs.js');
+const vibrator = require('./vibrators.js');
 
 /*
 USB Serial port
@@ -35,10 +37,13 @@ port1.on('data',function(data){
   }
 });
 
+try {
 port1.on('error',function(err){
   console.log(err);
 });
-
+}catch (e){
+  console.log(e);
+}
 var port2 = new serialP('/dev/ttyUSB1',{
   baudRate:dzv.DZ.baudRate,
   dataBits:dzv.DZ.dataBits,
@@ -55,90 +60,15 @@ port2.on('error',function(err){
    console.log(err);
 });
 
-/*
-vibrator class
-*/
 
-class jps{
-  constructor(mno){
-    this.mno = mno;
-    this.Hz = null;
-  }
+var jps01 = new vibrator('01').jps;
 
-  getHz(){
-     port2.write('R,01,57\r');
-  }
-
-  setHz(data){
-     //console.log(data + 'setHz');
-     port2.write('C,01,02,' + data + '\r');
-  }
-
-  parseValue(data){
-     //console.log(data);
-     this.Hz = data.split(',')[4];
-     //console.log(this.Hz);
-  }
-}
-
-var jps01 = new jps('01');
-
-/*
-U8256 class
-*/
-
-class U8256{
-  constructor(mno){
-    this.mno = mno;
-    this.analogData = '';
-    this.digitalData = '';
-  }
-
-  getValue(){
-     port1.write(setupjson.U8256.GetValue);
-  }  
-
-  calValue(va){
-     if(va < 32767) {
-       return va;
-     }else{
-       va = va - 65536;
-       if(va > -20000){
-         return va;
-      }else{
-      return "-";
-      }
-    }
-  }
-
-  parseAna(data){
-    this.analogData = data.slice(5,74);    
-    this.TPV =  this.calValue(parseInt(data.slice(5,9),16))/100;
-    this.HPV = this.calValue(parseInt(data.slice(9,13),16))/100;
-    this.TSV = this.calValue(parseInt(data.slice(13,17),16))/100;
-    this.HSV = this.calValue(parseInt(data.slice(17,21),16))/100;
-    this.Steps = parseInt(data.slice(29,33),16);
-    this.Patterns = parseInt(data.slice(33,35),16);
-    this.NowPCycles =  parseInt(data.slice(44,48),16) - parseInt(data.slice(48,52),16);
-  }
-
-  parseDig(data){
-    this.digitalData = data.slice(5,17);
-    this.status = this.digitalData.slice(0,4);
-    if(this.status == '0001' || this.status == '0011'){
-	this.running = true;
-    }else{
-	this.running = false;
-    }
-  }
-}
-
-var U825601 = new U8256('01');
+var U825601 = new OYO('01').U8256s;
 
 /*
 Intergrator , to cooridnate U8256 and Vibrator;
 */
-
+/*
 class Coordinator{
   constructor(){
     this.Hz = null;
@@ -187,7 +117,7 @@ class Coordinator{
 
    }  
 }
-
+*/
 var Coordinator1 = new Coordinator();
 
 class Hztable{
@@ -314,7 +244,6 @@ Config system parameters
 app.get('/GetVibrator',function(req,res){
    //var getv = JSON.parse(fs.readFile('vibrator.json','utf8'));
    var getv = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
-   //console.log(getv.DZ.Hz);
    res.header('Content-Type','application/json');
    res.send(getv.DZ.PCycles);
    res.end;  
@@ -327,9 +256,11 @@ port2.write('W,01,16,00000\r');
 },5000);
 */
 //setTimeout(function(){jps01.setHz('00000')},5000);
+/*
 var t1 = setInterval(function(){
 	Coordinator1.CheckCSHz();
 	savemongo();
          },1000);
+*/
 //var t1 = setInterval(schd,1000);
 //console.log(Hztable01.Hzt[1][2]);

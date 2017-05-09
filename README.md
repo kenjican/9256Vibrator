@@ -63,6 +63,9 @@ solution: W,01,93,00201
 resotre to default config: W,00,93,00001
 have to reboot.the communication parameters take effect
 
+(18): Damn , HMI does not support ASCII communication.We have to figure out the solution for Modbus RTU
+solution: run the vibrator by setting the bit of DI5 and Hz in Pr00
+
 Idea:
 (1)Seperate all the controller ,vibrator into single file. Setup.json is a configuration file for integrating all the parts.
 
@@ -71,3 +74,6 @@ Idea:
 (3) How to protect the program? encrypt the SD card? or provide the usb-serial port and fix the serial number of USB serial chip?
 
 (4) Color Scheme: techonic , light , delight feeling..
+
+(5) remote controll support.  Socket.io could be as qq or wechat ,no need to map port in router and get dynamic ip....it's a good idea for after sales service.
+

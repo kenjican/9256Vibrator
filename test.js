@@ -54,18 +54,20 @@ transporter.sendMail(mailOptions,function(err,info){
 });
 
 */
+
+/*
 var http = require('http');
 var qs = require('querystring');
 var fs = require('fs');
 var path = require('path');
-/*
+
 var postdata = qs.stringify({
   'lan':'zh',
   'ie':'UTF-8',
   'spd':2,
   'text':'测试百度语音在诺德寄诶思'
 });
-*/
+
 var postdata = encodeURI('警报1通知工程师');
 var options={
   //'method':'GET',
@@ -87,6 +89,11 @@ var req = http.request(options,function(res){
   });
 });
 req.end();
+
+*/
+
+
+
 /*
 var sp = require('serialport');
 var fs = require('fs');
@@ -108,3 +115,30 @@ console.log(U8256.stop);
 console.log(U8256.getvalue);
 console.log(U8256.steps);
 */
+
+/*test cluster
+
+var cluster = require('cluster');
+var http = require('http');
+var numcpus = require('os').cpus().length;
+console.log(numcpus);
+*/
+
+/*
+let Serialport = require('serialport');
+Serialport.list(function(err,ports){
+  ports.forEach(function(port){
+    console.log(port.comName);
+    console.log(port.pnpId);
+    console.log(port.manufacturer);
+    console.log(port.serialNumber);
+    console.log(port.locationId);
+    console.log(port.productId);
+    console.log(port.vendorId);
+  });
+});
+*/
+
+const a = require('./serials.js');
+let b = new Serials();
+b.lists();
