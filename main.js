@@ -11,10 +11,10 @@ mongoose.Promise = require('bluebird');
 var serialP = require('serialport');
 const OYO = require('./OYOs.js');
 const vibrator = require('./vibrators.js');
-
+const serials = require('./serials.js');
 /*
 USB Serial port
-*/
+
 var port1 = new serialP('/dev/ttyUSB0',{
   baudRate:setupjson.U8256.baudRate,
   dataBits:setupjson.U8256.dataBits,
@@ -59,11 +59,12 @@ port2.on('data',function(data){
 port2.on('error',function(err){
    console.log(err);
 });
+*/
 
-
+var Serials = new serials();
 var jps01 = new vibrator('01').jps;
-
-var U825601 = new OYO('01').U8256s;
+var U825601 = new OYO('01');
+//var U825601 = new U8256s('01');
 
 /*
 Intergrator , to cooridnate U8256 and Vibrator;
@@ -118,7 +119,7 @@ class Coordinator{
    }  
 }
 */
-var Coordinator1 = new Coordinator();
+//var Coordinator1 = new Coordinator();
 
 class Hztable{
   constructor(){
@@ -262,5 +263,7 @@ var t1 = setInterval(function(){
 	savemongo();
          },1000);
 */
-//var t1 = setInterval(schd,1000);
+var t1 = setInterval(function(){
+	Serials.port1.write(U825601.getValue);
+        },1000);
 //console.log(Hztable01.Hzt[1][2]);

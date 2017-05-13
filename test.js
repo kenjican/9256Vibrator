@@ -123,8 +123,8 @@ var http = require('http');
 var numcpus = require('os').cpus().length;
 console.log(numcpus);
 */
-
 /*
+
 let Serialport = require('serialport');
 Serialport.list(function(err,ports){
   ports.forEach(function(port){
@@ -137,8 +137,21 @@ Serialport.list(function(err,ports){
     console.log(port.vendorId);
   });
 });
+
 */
 
-const a = require('./serials.js');
+//const serialp = require('serialport');
+
+const Serials = require('./serials.js');
 let b = new Serials();
 b.lists();
+console.log(b.serialconfig.port1.baudRate);
+for(key in b.serialconfig){
+    
+}
+
+/*
+for(key in b){
+  console.log(b[key]);
+}
+*/

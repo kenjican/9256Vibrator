@@ -3,12 +3,14 @@ class U8256s{
     this.mno = mno;
     this.analogData = '';
     this.digitalData = '';
+    this.getValue = '@010140*\r\n';
   }
-
+/*
   getValue(){
-     port1.write(setupjson.U8256.GetValue);
+     //port1.write(setupjson.U8256.GetValue);
+    Serials.port1.write('@010140*\r\n');   
   }  
-
+*/
   calValue(va){
      if(va < 32767) {
        return va;
