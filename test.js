@@ -140,18 +140,43 @@ Serialport.list(function(err,ports){
 
 */
 
-//const serialp = require('serialport');
+const fs = require('fs');
+let sjson = JSON.parse(fs.readFileSync('./serials1.json'));
+const serialp = require('serialport');
+let binding = [];
+serialp.list(function(err,ports){
+   ports.forEach(function(port){
+     if(typeof port.serialNumber != 'undefined'){
+     console.log(port);
+     }
+  //   console.log('fefwf\r');
+  //   binding.push(port);
+     //let conf = checktable('FTDI_FT232R_USB_UART_A1050VLH');
+     //console.log(conf.serialNumber);
+   /*  if(typeof conf != 'undefined'){
+       console.log(conf);
+      port1 = new serialp(port.comName,{
+         baudRate:conf.baudRate,
+	 stopBits:conf.stopBits,
+	 dataBits:conf.dataBits,
+	 parity:conf.parity
+     });
+   }
+   */
+   });
+   //console.log(typeof port1);
+//   port1.write('gdgd');
 
-const Serials = require('./serials.js');
-let b = new Serials();
-b.lists();
-console.log(b.serialconfig.port1.baudRate);
-for(key in b.serialconfig){
-    
-}
+});
 
-/*
-for(key in b){
-  console.log(b[key]);
+function checktable(sn){
+   sjson.forEach(function(sj){
+     if(sj.serialNumber == sn){
+     return sj;
+     }else{
+     return 'undefined';
+     }
+   });
 }
-*/
+//console.log(binding);
+//setTimeout(function(){console.log(binding);},2000);

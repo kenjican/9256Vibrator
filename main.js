@@ -1,4 +1,8 @@
 var bodyParser = require('body-parser');
+const serials = require('./serials.js');
+var serial = new serials;
+serial.init();
+
 var fs = require('fs');
 var setupjson = JSON.parse(fs.readFileSync('setup.json','utf8'));
 var dzv = JSON.parse(fs.readFileSync('config/vibrator.json','utf8'));
@@ -8,10 +12,9 @@ var net = require('net');
 var value;
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-var serialP = require('serialport');
+//var serialP = require('serialport');
 const OYO = require('./OYOs.js');
 const vibrator = require('./vibrators.js');
-const serials = require('./serials.js');
 /*
 USB Serial port
 
@@ -61,9 +64,8 @@ port2.on('error',function(err){
 });
 */
 
-var Serials = new serials();
 var jps01 = new vibrator('01').jps;
-var U825601 = new OYO('01');
+var U825601 = new OYO.U8256s('01');
 //var U825601 = new U8256s('01');
 
 /*
@@ -263,7 +265,13 @@ var t1 = setInterval(function(){
 	savemongo();
          },1000);
 */
+/*
 var t1 = setInterval(function(){
-	Serials.port1.write(U825601.getValue);
+	serial.port1.write(U825601.getValue);
         },1000);
+*/
 //console.log(Hztable01.Hzt[1][2]);
+//serial.init();
+//console.log(serial.serialconfig);
+setTimeout(function(){serial.port1.write('@010140');},200);
+//serial.port1.write('@010140*\r\n');

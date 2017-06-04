@@ -1,0 +1,35 @@
+[
+    {
+     "ports":"port0",
+     "serialNumber":"FTDI_FT232R_USB_UART_A1050VLH",
+     "baudRate":9600,
+     "stopBits":1,
+     "dataBits":8,
+     "parity":"even"
+  },
+
+  {  "ports":"port1",
+     "serialNumber":"FTDI_FT232R_USB_UART_A105ZJJ9",
+     "baudRate":9600,
+     "stopBits":2,
+     "dataBits":7,
+     "parity":"even"
+  }, 
+  
+  {  "ports":"port2",
+     "serialNumber":"",
+     "baudRate":9600,
+     "stopBits":2,
+     "dataBits":7,
+     "parity":"even"
+  },
+
+  {  "ports":"port3",
+     "serialNumber":"",
+     "baudRate":9600,
+     "stopBits":2,
+     "dataBits":7,
+     "parity":"even"
+  }
+
+]

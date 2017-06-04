@@ -47,4 +47,4 @@ class U8256s{
 
 }
 
-module.exports= U8256s;
+module.exports = {U8256s};
