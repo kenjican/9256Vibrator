@@ -1,28 +1,6 @@
 const serialp = require('serialport');
 const fs = require('fs');
 
-class Serials{
- 
-  constructor(){
-    this.config = JSON.parse(fs.readFileSync('./serials.json'));
-
-  }
-
-  init(){
-    console.log(this.config);
-    serialp.list(function(err,ports){
-      ports.forEach(function(port){
-        if(typeof port.serialNumber != 'undefined'){
-          console.log(port.serialNumber);
-        }
-      });
-    });
-  }
-
-}
-
-module.exports = Serials;
-/*
 function Serials(){
  // this.port1 = null;
  //this.serialconfig = JSON.parse(fs.readFileSync('./serials.json'));
@@ -119,5 +97,6 @@ class Serials{
 //  });
 //  }
 }
-*/
 
+module.exports = {Serials};
+*/
